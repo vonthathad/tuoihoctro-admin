@@ -1,0 +1,12 @@
+body{
+  background-color: #f5f6f7;
+}
+a{
+  color: #fff;
+}
+a:hover{
+  text-decoration: none;
+}
+.fb_iframe_widget iframe{
+  width: 350px!important;
+}
