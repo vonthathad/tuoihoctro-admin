@@ -5,14 +5,14 @@ import serverConfig from '../configs/server.config';
 const connection = mongoose.createConnection(serverConfig.mongoURL);
 autoIncrement.initialize(connection);
 const Schema = mongoose.Schema;
-const AdminSchema = new Schema({
+const UserSchema = new Schema({
   _id: String,
   displayName: String,
-  adminname: {
+  username: {
     type: String,
     unique: true,
-    required: 'Adminname is required',
-    match: [/^[A-Za-z0-9_.]{1,15}$/, 'Please fill a valid adminname'],
+    required: 'Username is required',
+    match: [/^[A-Za-z0-9_.]{1,15}$/, 'Please fill a valid username'],
     trim: true,
   },
   email: {
@@ -39,7 +39,7 @@ const AdminSchema = new Schema({
   },
   role: {
     type: String,
-    default: 'admin',
+    default: 'user',
   },
   provider: {
     type: String,
@@ -56,8 +56,8 @@ const AdminSchema = new Schema({
   resetPasswordExpires: Date,
 });
 
-AdminSchema.plugin(autoIncrement.plugin, {
-  model: 'Admin',
+UserSchema.plugin(autoIncrement.plugin, {
+  model: 'User',
   startAt: 1,
 });
 
@@ -72,7 +72,7 @@ function preSave(next) {
   next();
 }
 
-function findAdminByEmail(email, callback) {
+function findUserByEmail(email, callback) {
   this.findOne({
     email,
   }, '-password -salt', callback);
@@ -87,17 +87,17 @@ function authenticate(password) {
   return this.password === this.hashPassword(password);
 }
 
-function findUniqueAdminname(adminname, suffix, callback) {
+function findUniqueUsername(username, suffix, callback) {
   // const _this = this;
-  const possibleAdminname = adminname + (suffix || '');
+  const possibleUsername = username + (suffix || '');
   this.findOne({
-    adminname: possibleAdminname,
-  }, (err, admin) => {
+    username: possibleUsername,
+  }, (err, user) => {
     if (!err) {
-      if (!admin) {
-        callback(possibleAdminname);
+      if (!user) {
+        callback(possibleUsername);
       } else {
-        return this.findUniqueAdminname(adminname, (suffix || 0) + 1, callback);
+        return this.findUniqueUsername(username, (suffix || 0) + 1, callback);
       }
     } else {
       callback(null);
@@ -106,9 +106,9 @@ function findUniqueAdminname(adminname, suffix, callback) {
   });
 }
 
-AdminSchema.pre('save', preSave);
-AdminSchema.statics.findAdminByEmail = findAdminByEmail;
-AdminSchema.methods.hashPassword = hashPassword;
-AdminSchema.methods.authenticate = authenticate;
-AdminSchema.statics.findUniqueAdminname = findUniqueAdminname;
-export default mongoose.model('Admin', AdminSchema);
+UserSchema.pre('save', preSave);
+UserSchema.statics.findUserByEmail = findUserByEmail;
+UserSchema.methods.hashPassword = hashPassword;
+UserSchema.methods.authenticate = authenticate;
+UserSchema.statics.findUniqueUsername = findUniqueUsername;
+export default mongoose.model('User', UserSchema);

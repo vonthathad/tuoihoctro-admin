@@ -27,13 +27,15 @@ class Login extends Component {
     const length = this.state.value.length;
     if (length > 10) return 'success';
     else if (length > 5) return 'warning';
-        else if (length > 0) return 'error';
+    else if (length > 0) return 'error';
+    return null;
   }
   getPasswordValidationState() {
     const length = this.state.value.length;
     if (length > 10) return 'success';
     else if (length > 5) return 'warning';
-        else if (length > 0) return 'error';
+    else if (length > 0) return 'error';
+    return null;
   }
   handleUsernameChange(e) {
     this.setState({ username: e.target.value });
@@ -43,44 +45,44 @@ class Login extends Component {
   }
   render() {
     return (
-            <div className="container">
-                <h1>Login</h1>
-                <form>
-                    <FormGroup
-                      controlId="username"
-                      validationState={this.getUsernameValidationState()}
-                    >
-                        <ControlLabel>Username</ControlLabel>
-                        <FormControl
-                          type="text"
-                          value={this.state.username}
-                          placeholder="Enter username"
-                          onChange={this.handleUsernameChange}
-                        />
-                        <FormControl.Feedback />
-                        {/* <HelpBlock>Validation is based on string length.</HelpBlock>*/}
-                    </FormGroup>
+      <div className="container">
+        <h1>Login</h1>
+        <form>
+          <FormGroup
+            controlId="username"
+            validationState={this.getUsernameValidationState()}
+          >
+            <ControlLabel>Username</ControlLabel>
+            <FormControl
+              type="text"
+              value={this.state.username}
+              placeholder="Enter username"
+              onChange={this.handleUsernameChange}
+            />
+            <FormControl.Feedback />
+            {/* <HelpBlock>Validation is based on string length.</HelpBlock>*/}
+          </FormGroup>
 
-                    <FormGroup
-                      controlId="password"
-                      validationState={this.getPasswordValidationState()}
-                    >
-                        <ControlLabel>Password</ControlLabel>
-                        <FormControl
-                          type="text"
-                          value={this.state.password}
-                          placeholder="Enter password"
-                          onChange={this.handlePasswordChange}
-                        />
-                        <FormControl.Feedback />
-                        {/* <HelpBlock>Validation is based on string length.</HelpBlock>*/}
-                    </FormGroup>
-                    <ButtonToolbar>
-                        <Button bsStyle="primary">Login</Button>
-                    </ButtonToolbar>
-                </form>
-            </div>
-        );
+          <FormGroup
+            controlId="password"
+            validationState={this.getPasswordValidationState()}
+          >
+            <ControlLabel>Password</ControlLabel>
+            <FormControl
+              type="text"
+              value={this.state.password}
+              placeholder="Enter password"
+              onChange={this.handlePasswordChange}
+            />
+            <FormControl.Feedback />
+            {/* <HelpBlock>Validation is based on string length.</HelpBlock>*/}
+          </FormGroup>
+          <ButtonToolbar>
+            <Button bsStyle="primary">Login</Button>
+          </ButtonToolbar>
+        </form>
+      </div>
+    );
   }
 }
 

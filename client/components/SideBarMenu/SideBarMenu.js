@@ -17,7 +17,8 @@ export default class SideBarMenu extends Component {
           <Navbar.Collapse>
             <Navbar.Text className={styles.userMenu}>
               <Link to="/"><Navbar.Link><Glyphicon glyph="home" /></Navbar.Link></Link>
-              <Navbar.Link href="#"><Glyphicon glyph="log-out" /></Navbar.Link>
+              <Link to="/login"><Navbar.Link href="#"><Glyphicon glyph="log-in" /></Navbar.Link></Link>
+              <Link to="/register"><Navbar.Link href="#"><Glyphicon glyph="registration-mark" /></Navbar.Link></Link>
             </Navbar.Text>
             <Nav>
               <NavDropdown eventKey={1} title="Categories">
