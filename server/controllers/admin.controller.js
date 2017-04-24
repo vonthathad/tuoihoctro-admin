@@ -35,17 +35,13 @@ export function authLogout(req, res) {
 export function login(req, res, next) {
   passport.authenticate('local', (err, admin, info) => {
     if (err) { return next(err); }
-    if (!admin) { return res.json({ message: info.message }); }
-        // console.log(admin);
+    if (!admin) { return res.status(404).send({ error: info.message }); }
     res.status(200).send({ data: admin });
     return null;
   })(req, res, next);
 }
 export function register(req, res) {
-    //   console.log(req.body);
-  console.log(req.body);
   if (!req.admin) {
-        // console.log(req.body);
     const admin = new Admin();
     admin.email = req.body.email;
     admin.username = req.body.username;
@@ -58,8 +54,8 @@ export function register(req, res) {
       email: req.body.email,
     };
     admin.token = Jwt.sign(tokenDt, privateKey);
-        // console.log(admin);
     admin.save((err, result) => {
+      console.log(err);
       console.log(result);
       if (err) {
         const messages = getErrorMessage(err);

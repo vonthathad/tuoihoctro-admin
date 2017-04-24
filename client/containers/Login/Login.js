@@ -5,45 +5,70 @@ import FormControl from 'react-bootstrap/lib/FormControl';
 import ButtonToolbar from 'react-bootstrap/lib/ButtonToolbar';
 import Button from 'react-bootstrap/lib/Button';
 import HelpBlock from 'react-bootstrap/lib/HelpBlock';
+
+import { _login } from '../../redux/modules/auth';
+import { connect } from 'react-redux';
+import { browserHistory } from 'react-router';
 class Login extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      value: '',
+      user: {
+        username: '',
+        password: '',
+      },
     };
     this.handleUsernameChange = this.handleUsernameChange.bind(this);
     this.handlePasswordChange = this.handlePasswordChange.bind(this);
-    this.getInitialState = this.getInitialState.bind(this);
     this.getUsernameValidationState = this.getUsernameValidationState.bind(this);
     this.getPasswordValidationState = this.getPasswordValidationState.bind(this);
+    this.handleLoginClicked = this.handleLoginClicked.bind(this);
   }
-  getInitialState() {
-    return {
-      username: '',
-      password: '',
-    };
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.user && nextProps.user.displayName && nextProps.user !== this.props.user) {
+      alert(`${nextProps.user.displayName} login sucessfully`);
+      localStorage.setItem('token', nextProps.user.token);
+      browserHistory.push('/');
+    } else if (nextProps.error && nextProps.error !== this.props.error) {
+      alert(nextProps.error);
+    }
   }
+
   getUsernameValidationState() {
-    const length = this.state.value.length;
+    const length = this.state.user.username.length;
     if (length > 10) return 'success';
     else if (length > 5) return 'warning';
     else if (length > 0) return 'error';
     return null;
   }
   getPasswordValidationState() {
-    const length = this.state.value.length;
+    const length = this.state.user.password.length;
     if (length > 10) return 'success';
     else if (length > 5) return 'warning';
     else if (length > 0) return 'error';
     return null;
   }
+  handleLoginClicked() {
+    this.props.login(this.state.user);
+  }
   handleUsernameChange(e) {
-    this.setState({ username: e.target.value });
+    this.setState({
+      user: {
+        ...this.state.user,
+        username: e.target.value,
+      },
+    });
   }
   handlePasswordChange(e) {
-    this.setState({ password: e.target.value });
+    this.setState({
+      user: {
+        ...this.state.user,
+        password: e.target.value,
+      },
+    });
   }
   render() {
+    const { user } = this.state;
     return (
       <div className="container">
         <h1>Login</h1>
@@ -55,7 +80,7 @@ class Login extends Component {
             <ControlLabel>Username</ControlLabel>
             <FormControl
               type="text"
-              value={this.state.username}
+              value={user.username}
               placeholder="Enter username"
               onChange={this.handleUsernameChange}
             />
@@ -69,8 +94,8 @@ class Login extends Component {
           >
             <ControlLabel>Password</ControlLabel>
             <FormControl
-              type="text"
-              value={this.state.password}
+              type="password"
+              value={user.password}
               placeholder="Enter password"
               onChange={this.handlePasswordChange}
             />
@@ -78,7 +103,7 @@ class Login extends Component {
             {/* <HelpBlock>Validation is based on string length.</HelpBlock>*/}
           </FormGroup>
           <ButtonToolbar>
-            <Button bsStyle="primary">Login</Button>
+            <Button bsStyle="primary" onClick={this.handleLoginClicked}>Login</Button>
           </ButtonToolbar>
         </form>
       </div>
@@ -87,7 +112,19 @@ class Login extends Component {
 }
 
 Login.propTypes = {
-
+  login: PropTypes.func,
+  user: PropTypes.object,
+  error: PropTypes.string,
 };
-
-export default Login;
+function mapDispatchToProps(dispatch) {
+  return {
+    login: (input) => dispatch(_login(input)),
+  };
+}
+function mapStateToProps(store) {
+  return {
+    user: store.auth.user,
+    error: store.auth.error,
+  };
+}
+export default connect(mapStateToProps, mapDispatchToProps)(Login);

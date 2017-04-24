@@ -5,7 +5,7 @@ import Button from 'react-bootstrap/lib/Button';
 
 import { Link } from 'react-router';
 import { loadGames } from '../../redux/modules/gameDetail';
-import SideBarMenu from '../../components/SideBarMenu/SideBarMenu';
+// import SideBarMenu from '../../containers/SideBarMenu/SideBarMenu';
 class MythList extends Component {
   componentDidMount() {
     this.props.loadGames();

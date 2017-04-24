@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import passport from 'passport';
 import * as users from '../controllers/user.controller';
+import * as admins from '../controllers/admin.controller';
 import * as posts from '../controllers/post.controller';
 import * as comments from '../controllers/comment.controller';
 import * as categories from '../controllers/category.controller';
@@ -22,12 +23,12 @@ router.route('/users/:userName')
 router.param('userName', users.userByUsername);
 
 // /////////// GAME
-router.get('/games', games.list)
-  .post('/games', games.create);
-router.get('/games/:gameId', games.get)
-  .put('/games/:gameId', games.update)
-  .delete('/games/:gameId', games.delete);
-router.param('gameId', games.gameById);
+router.get('/games', admins.requiresLogin, games.list)
+  .post('/games', admins.requiresLogin, games.create);
+router.get('/games/:gameId', admins.requiresLogin, games.get)
+  .put('/games/:gameId', admins.requiresLogin, games.update)
+  .delete('/games/:gameId', admins.requiresLogin, games.delete);
+router.param('gameId', admins.requiresLogin, games.gameById);
 
 // ////////// CATEGORY
 router.post('/categories', categories.create)

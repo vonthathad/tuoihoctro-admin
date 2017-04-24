@@ -1,7 +1,7 @@
 const BearerStrategy = require('passport-http-bearer').Strategy;
 import serverConfig from '../../configs/server.config';
 const Jwt = require('jsonwebtoken');
-import User from '../../models/user.model';
+import Admin from '../../models/admin.model';
 const privateKey = serverConfig.key.privateKey;
 export default (passport) => {
   passport.use(new BearerStrategy({}, (token, done) => {
@@ -13,8 +13,8 @@ export default (passport) => {
         return done(null, false);
       }
       // console.log(decoded.email);
-      User.findUserByEmail(decoded.email, (err1, user) => {
-        return !user ? done(null, false) : done(null, user);
+      Admin.findAdminByEmail(decoded.email, (err1, admin) => {
+        return !admin ? done(null, false) : done(null, admin);
       });
       return null;
     });

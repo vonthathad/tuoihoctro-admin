@@ -1,5 +1,4 @@
 import bearer from './subModules/bearer';
-import facebook from './subModules/facebook.passport';
 import local from './subModules/local.passport';
 
 const mongoose = require('mongoose');
@@ -17,7 +16,6 @@ export default (passport) => {
     });
   });
   bearer(passport);
-  facebook(passport);
   local(passport);
 };
 

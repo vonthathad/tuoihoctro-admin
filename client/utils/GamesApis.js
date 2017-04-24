@@ -1,8 +1,15 @@
 import { get, post, put, _delete } from './_requestCaller';
+function getToken() {
+  if (window.localStorage.getItem('token')) {
+    return window.localStorage.getItem('token');
+  }
+  return null;
+}
+
 export function getGames(query) {
   const headers = {
     'Content-type': 'application/json',
-    Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InNpcmRhdDE5OTNAeWFob28uY29tLnZuIiwiaWF0IjoxNDg4Mjc2OTM3fQ.JZmGONiFIwH5Q8eZ7bsWiATm7Pxsfy8Lsh96aKSY_HQ',
+    Authorization: `Bearer ${getToken()}`,
   };
   return get({
     query,
@@ -13,7 +20,7 @@ export function getGames(query) {
 export function getGame(path) {
   const headers = {
     'Content-type': 'application/json',
-    Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InNpcmRhdDE5OTNAeWFob28uY29tLnZuIiwiaWF0IjoxNDg4Mjc2OTM3fQ.JZmGONiFIwH5Q8eZ7bsWiATm7Pxsfy8Lsh96aKSY_HQ',
+    Authorization: `Bearer ${getToken()}`,
   };
   return get({
     path,
@@ -23,7 +30,7 @@ export function getGame(path) {
 }
 export function postGame(input) {
   const headers = {
-    Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InNpcmRhdDE5OTNAeWFob28uY29tLnZuIiwiaWF0IjoxNDg4Mjc2OTM3fQ.JZmGONiFIwH5Q8eZ7bsWiATm7Pxsfy8Lsh96aKSY_HQ',
+    Authorization: `Bearer ${getToken()}`,
   };
   return post({
     body: input,
@@ -33,7 +40,7 @@ export function postGame(input) {
 }
 export function putGame(path, input) {
   const headers = {
-    Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InNpcmRhdDE5OTNAeWFob28uY29tLnZuIiwiaWF0IjoxNDg4Mjc2OTM3fQ.JZmGONiFIwH5Q8eZ7bsWiATm7Pxsfy8Lsh96aKSY_HQ',
+    Authorization: `Bearer ${getToken()}`,
   };
   return put({
     path,
@@ -44,7 +51,7 @@ export function putGame(path, input) {
 }
 export function deleteGame(path) {
   const headers = {
-    Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InNpcmRhdDE5OTNAeWFob28uY29tLnZuIiwiaWF0IjoxNDg4Mjc2OTM3fQ.JZmGONiFIwH5Q8eZ7bsWiATm7Pxsfy8Lsh96aKSY_HQ',
+    Authorization: `Bearer ${getToken()}`,
   };
   return _delete({
     path,

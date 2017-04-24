@@ -66,7 +66,6 @@ class GameList extends Component {
                 <th>Plays/ Shares/ Views Count</th>
                 <th>Des</th>
                 <th>Published</th>
-                <th>Color</th>
                 <th>Created</th>
                 <th>Commands</th>
               </tr>
@@ -80,7 +79,6 @@ class GameList extends Component {
                   <td>{`${game.playsCount} / ${game.sharesCount} / ${game.viewsCount}`}</td>
                   <td>{game.des}</td>
                   <td>{game.publish ? 'true' : 'false'}</td>
-                  <td><div style={{ width: '70px', height: '70px', backgroundColor: `${game.color}` }}></div></td>
                   <td>{new Date(game.created).toLocaleString()}</td>
                   <td>
                     <Link to={`/games/${game._id}`}>

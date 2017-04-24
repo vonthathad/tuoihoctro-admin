@@ -1,9 +1,9 @@
 import React, { Component, PropTypes } from 'react';
-import Login from '../Login/Login';
-import GameList from '../GameList/GameList';
-import Header from '../Header/Header';
+// import Login from '../Login/Login';
+// import GameList from '../GameList/GameList';
+// import Header from '../Header/Header';
 import DevTools from '../../components/DevTools/DevTools';
-import SideBarMenu from '../../components/SideBarMenu/SideBarMenu';
+import SideBarMenu from '../../containers/SideBarMenu/SideBarMenu';
 import st from './App.css';
 class App extends Component {
   constructor(props) {

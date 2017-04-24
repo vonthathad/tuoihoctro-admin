@@ -5,7 +5,7 @@ import serverConfig from '../configs/server.config';
 const connection = mongoose.createConnection(serverConfig.mongoURL);
 autoIncrement.initialize(connection);
 const Schema = mongoose.Schema;
-const UserSchema = new Schema({
+const AdminSchema = new Schema({
   _id: String,
   displayName: String,
   username: {
@@ -56,8 +56,8 @@ const UserSchema = new Schema({
   resetPasswordExpires: Date,
 });
 
-UserSchema.plugin(autoIncrement.plugin, {
-  model: 'User',
+AdminSchema.plugin(autoIncrement.plugin, {
+  model: 'Admin',
   startAt: 1,
 });
 
@@ -72,7 +72,7 @@ function preSave(next) {
   next();
 }
 
-function findUserByEmail(email, callback) {
+function findAdminByEmail(email, callback) {
   this.findOne({
     email,
   }, '-password -salt', callback);
@@ -87,17 +87,17 @@ function authenticate(password) {
   return this.password === this.hashPassword(password);
 }
 
-function findUniqueUsername(username, suffix, callback) {
+function findUniqueAdminname(username, suffix, callback) {
   // const _this = this;
-  const possibleUsername = username + (suffix || '');
+  const possibleAdminname = username + (suffix || '');
   this.findOne({
-    username: possibleUsername,
+    username: possibleAdminname,
   }, (err, user) => {
     if (!err) {
       if (!user) {
-        callback(possibleUsername);
+        callback(possibleAdminname);
       } else {
-        return this.findUniqueUsername(username, (suffix || 0) + 1, callback);
+        return this.findUniqueAdminname(username, (suffix || 0) + 1, callback);
       }
     } else {
       callback(null);
@@ -106,9 +106,9 @@ function findUniqueUsername(username, suffix, callback) {
   });
 }
 
-UserSchema.pre('save', preSave);
-UserSchema.statics.findUserByEmail = findUserByEmail;
-UserSchema.methods.hashPassword = hashPassword;
-UserSchema.methods.authenticate = authenticate;
-UserSchema.statics.findUniqueUsername = findUniqueUsername;
-export default mongoose.model('User', UserSchema);
+AdminSchema.pre('save', preSave);
+AdminSchema.statics.findAdminByEmail = findAdminByEmail;
+AdminSchema.methods.hashPassword = hashPassword;
+AdminSchema.methods.authenticate = authenticate;
+AdminSchema.statics.findUniqueAdminname = findUniqueAdminname;
+export default mongoose.model('Admin', AdminSchema);

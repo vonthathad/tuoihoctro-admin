@@ -1,28 +1,28 @@
 import PassportLocal from 'passport-local';
 const LocalStrategy = PassportLocal.Strategy;
 import mongoose from 'mongoose';
-const User = mongoose.model('User');
-// import User from '../../models/user.model';
+const Admin = mongoose.model('Admin');
+// import Admin from '../../models/admin.model';
 export default (passport) => {
   passport.use(new LocalStrategy((email, password, done) => {
-    User.findOne({
+    Admin.findOne({
       email,
-    }, (err, user) => {
+    }, (err, admin) => {
       if (err) {
         return done(err);
       }
 
-      if (!user) {
+      if (!admin) {
         return done(null, false, {
           message: 'Tài khoản không tồn tại',
         });
       }
-      if (!user.authenticate(password)) {
+      if (!admin.authenticate(password)) {
         return done(null, false, {
           message: 'Sai mật khẩu',
         });
       }
-      return done(null, user);
+      return done(null, admin);
     });
   }));
 };

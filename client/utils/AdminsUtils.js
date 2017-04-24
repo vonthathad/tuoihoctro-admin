@@ -1,23 +1,23 @@
 import { post, get } from './_requestCaller';
 
-export function login(body) {
+export function postLogin(input) {
   const headers = {
     'Content-type': 'application/json',
   };
   return post({
-    url: 'auth/login',
-    body: JSON.stringify(body.user),
+    url: 'auth/login-admin',
+    body: JSON.stringify(input),
     headers,
   });
 }
 
-export function register(body) {
+export function postRegister(input) {
   const headers = {
     'Content-type': 'application/json',
   };
   return post({
-    url: 'auth/register',
-    body: JSON.stringify(body.user),
+    url: 'auth/register-admin',
+    body: JSON.stringify(input),
     headers,
   });
 }
