@@ -3,7 +3,7 @@ function getToken() {
   if (window.localStorage.getItem('token')) {
     return window.localStorage.getItem('token');
   }
-  return null;
+  return 'CRzytqL1lv1o8FaogFa2S4MyYU4F6Z9D';
 }
 
 export function getPosts(query) {

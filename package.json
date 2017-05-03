@@ -1,5 +1,5 @@
 {
-  "name": "tuoihoctro",
+  "name": "tht-admin-client",
   "version": "2.0.0",
   "description": "Boilerplate project for building Isomorphic apps using React and Redux",
   "scripts": {
