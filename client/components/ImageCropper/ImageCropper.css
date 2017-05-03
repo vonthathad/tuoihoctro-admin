@@ -1,19 +1,21 @@
 .wrapper{
-    position: absolute;
-     width: 100%;
+    /*position: absolute;*/
+     /*width: 800px;*/
      top: 0px;
     left: 0px;
 }
 .crop-wrapper{
     position: relative;
     background-color: #FFF;
-    height: 100vh;
+    float:left;
+    /*height: 800px;*/
 }
 .resize-container{
     position: absolute;
     display: inline-block;
     cursor: move;
     margin: 0 auto;
+    margin-left: 2px;
 }
 
 .resize-container img {
@@ -61,11 +63,11 @@
 
 .overlay {
     position: absolute;
-     top:50%;
-    left: 50%;
+     /*top:50%;
+    left: 50%;*/
     /*margin-left: -100px;
     margin-top: -100px;*/
-    transform: translate(-50%, -50%);
+    /*transform: translate(-50%, -50%);*/
     z-index: 999;
     /*width: 200px;
     height: 200px;*/
@@ -117,24 +119,18 @@
 }
 
 .btn-crop{
-    position: absolute;
-    vertical-align: bottom;
-    right: 5px;
-    padding: 6px 10px;
     z-index: 999;
     background-color: rgba(222, 60, 80);
     border: none;
     border-radius: 5px;
-    color: #FFF;
 }
 .btn-exit{
-    position: absolute;
-    vertical-align: bottom;
-    right: 100px;
-    padding: 6px 10px;
     z-index: 999;
     background-color: rgba(222, 60, 80);
     border: none;
     border-radius: 5px;
-    color: #FFF;
+}
+
+.clear{
+    clear: both
 }

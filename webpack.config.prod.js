@@ -15,9 +15,6 @@ var cssnano = require('cssnano');
 module.exports = {
   devtool: 'hidden-source-map',
   entry: {
-    vendor: [
-      './client/vendor.js',
-    ],
     app: [
       './client/index.js',
     ],
@@ -30,8 +27,7 @@ module.exports = {
   // },
  output: {
     path: path.join(__dirname, "dist"),
-    filename: "[name].[chunkhash].js",
-    chunkFilename: "[name].[chunkhash].js"
+    filename: "[name].js",
   },
   resolve: {
     extensions: ['.js', '.jsx'],
@@ -102,11 +98,11 @@ module.exports = {
         'NODE_ENV': JSON.stringify('production'),
       }
     }),
-    new webpack.optimize.CommonsChunkPlugin({
-      name: 'vendor',
-      minChunks: Infinity,
-      filename: 'vendor.js',
-    }),
+    // new webpack.optimize.CommonsChunkPlugin({
+    //   name: 'vendor',
+    //   minChunks: Infinity,
+    //   filename: 'vendor.js',
+    // }),
 
 
     // new webpack.optimize.CommonsChunkPlugin({
@@ -120,17 +116,17 @@ module.exports = {
     //   manifestVariable: "webpackManifest"
     // }),
 
-    new ExtractTextPlugin({ filename: 'app.[chunkhash].css', allChunks: true }),
-    new ManifestPlugin({
-      fileName: 'manifest.json',
-      basePath: '/',
-    }),
-    new webpack.HashedModuleIdsPlugin(),
-    new WebpackChunkHash(),
-    new ChunkManifestPlugin({
-      filename: "chunk-manifest.json",
-      manifestVariable: "webpackManifest",
-    }),
+    new ExtractTextPlugin({ filename: 'app.css', allChunks: true }),
+    // new ManifestPlugin({
+    //   fileName: 'manifest.json',
+    //   basePath: '/',
+    // }),
+    // new webpack.HashedModuleIdsPlugin(),
+    // new WebpackChunkHash(),
+    // new ChunkManifestPlugin({
+    //   filename: "chunk-manifest.json",
+    //   manifestVariable: "webpackManifest",
+    // }),
     new webpack.optimize.UglifyJsPlugin()
   ],
 

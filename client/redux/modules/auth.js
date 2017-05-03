@@ -1,4 +1,4 @@
-import { postLogin, postRegister } from '../../utils/AdminsUtils';
+import { postLogin, postRegister } from '../../utils/AdminApi';
 const LOGIN = 'auth/LOGIN';
 const LOGIN_SUCCESS = 'auth/LOGIN_SUCCESS';
 const LOGIN_FAIL = 'auth/LOGIN_FAIL';

@@ -14,14 +14,16 @@ if (typeof require.ensure !== 'function') {
   https://github.com/reactjs/react-router/issues/2182 and
   https://github.com/gaearon/react-hot-loader/issues/288 is fixed.
  */
-if (process.env.NODE_ENV !== 'production') {
+// if (process.env.NODE_ENV !== 'production') {
   // Require async routes only in development for react-hot-reloader to work.
-  require('./containers/GameList/GameList.js');
-  require('./containers/GameDetail/GameDetail.js');
+  require('./containers/PostList/PostList.js');
+  require('./containers/PostDetail/PostDetail.js');
+  require('./containers/AdminList/AdminList.js');
+  require('./containers/AdminDetail/AdminDetail.js');
   require('./containers/Login/Login.js');
   require('./containers/Register/Register.js');
   require('./containers/Dashboard/Dashboard.js');
-}
+// }
 
 // react-router setup with code-splitting
 // More info: http://blog.mxstbr.com/2016/01/react-apps-with-pages/
@@ -35,50 +37,50 @@ export default (
       }}
     />
     <Route
-      path="/games"
+      path="/posts"
       getComponent={(nextState, cb) => {
         require.ensure([], require => {
-          cb(null, require('./containers/GameList/GameList.js').default);
+          cb(null, require('./containers/PostList/PostList.js').default);
         });
       }}
     />
     <Route
-      path="/games/:gameId"
+      path="/posts/:postId"
       getComponent={(nextState, cb) => {
         require.ensure([], require => {
-          cb(null, require('./containers/GameDetail/GameDetail.js').default);
+          cb(null, require('./containers/PostDetail/PostDetail.js').default);
         });
       }}
     />
     <Route
-      path="/create-game"
+      path="/create-post"
       getComponent={(nextState, cb) => {
         require.ensure([], require => {
-          cb(null, require('./containers/GameDetail/GameDetail.js').default);
+          cb(null, require('./containers/PostDetail/PostDetail.js').default);
         });
       }}
     />
     <Route
-      path="/myths"
+      path="/admins"
       getComponent={(nextState, cb) => {
         require.ensure([], require => {
-          cb(null, require('./containers/MythList/MythList.js').default);
+          cb(null, require('./containers/AdminList/AdminList.js').default);
         });
       }}
     />
     <Route
-      path="/myths/:mythId"
+      path="/admins/:adminId"
       getComponent={(nextState, cb) => {
         require.ensure([], require => {
-          cb(null, require('./containers/MythDetail/MythDetail.js').default);
+          cb(null, require('./containers/AdminDetail/AdminDetail.js').default);
         });
       }}
     />
     <Route
-      path="/create-myth"
+      path="/create-admin"
       getComponent={(nextState, cb) => {
         require.ensure([], require => {
-          cb(null, require('./containers/MythDetail/MythDetail.js').default);
+          cb(null, require('./containers/AdminDetail/AdminDetail.js').default);
         });
       }}
     />

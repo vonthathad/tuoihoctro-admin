@@ -1,0 +1,32 @@
+.formWrapper{
+    padding: 10px;
+}
+.buttons-wrapper{
+    text-align: right;
+}
+.processing{
+   position: absolute;
+   top: 0px;
+   left: 0px;
+   width: 100%;
+   height: 100%;
+   background-color: #000;
+   opacity: 0.4;
+}
+.loader {
+    border: 10px solid #f3f3f3; /* Light grey */
+    border-top: 10px solid #3498db; /* Blue */
+    border-radius: 50%;
+    width: 80px;
+    height: 80px;
+    animation: spin 1.2s linear infinite;
+    top: calc(50% - 40px);
+    left: calc(50% - 40px);
+    transform: translate(-50%, -50%);
+    position: absolute;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}

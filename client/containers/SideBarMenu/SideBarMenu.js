@@ -49,11 +49,12 @@ class SideBarMenu extends Component {
               <Link to="/register"><Navbar.Link href="#"><Glyphicon glyph="registration-mark" /></Navbar.Link></Link>
             </Navbar.Text>
             <Nav>
-              <NavDropdown eventKey={1} title="Categories">
-                <MenuItem eventKey={1.1}> <Link to="/games">Game Manager</Link></MenuItem>
+              <NavItem eventKey={1}><Link to="/posts">Posts</Link></NavItem>
+              {/* <NavDropdown eventKey={1} title="Categories">
+                <MenuItem eventKey={1.1}> <Link to="/posts">Post Manager</Link></MenuItem>
                 <MenuItem eventKey={1.2} href="#"><Link to="/myths">Myth Manager</Link></MenuItem>
-              </NavDropdown>
-              <NavItem eventKey={3}>Authorization</NavItem>
+              </NavDropdown>*/}
+              <NavItem eventKey={2}><Link to="/admins">Admins</Link></NavItem>
             </Nav>
           </Navbar.Collapse>
         </Navbar>

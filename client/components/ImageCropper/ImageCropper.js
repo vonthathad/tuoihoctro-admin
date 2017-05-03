@@ -10,6 +10,7 @@ class ImageCropper extends Component {
     };
 
     this.origSrc = new Image();
+    this.origSrc.crossOrigin = 'anonymous';
     this.constrain = false;
     this.minWidth = 60;
     this.minHeight = 60;
@@ -17,6 +18,7 @@ class ImageCropper extends Component {
     this.maxHeight = 900;
     this.resizeCanvas = document.createElement('canvas');
     this.eventState = {};
+    this.initContainerTop = 0;
 
     this.startResize = this.startResize.bind(this);
     this.endResize = this.endResize.bind(this);
@@ -27,43 +29,57 @@ class ImageCropper extends Component {
     this.endMoving = this.endMoving.bind(this);
     this.moving = this.moving.bind(this);
 
-    this.handleCropButtonClick = this.handleCropButtonClick.bind(this);
+    this.handleCropButtonClicked = this.handleCropButtonClicked.bind(this);
+    this.handleGetCropClicked = this.handleGetCropClicked.bind(this);
   }
   componentDidMount() {
     // this.origSrc.src = this.resizeImageRef.src;
     this.resizeContainerRef.addEventListener('mousedown', this.startResize);
     this.resizeContainerRef.addEventListener('mousedown', this.startMoving);
   }
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps({ resultWidth, resultHeight, inputSrc }) {
     // this.overlayInnerRef.setAttribute('data-height', '100px');
     // console.log(`height: ${nextProps.resultWidth + 4}px`);
 
-    this.origSrc.src = this.props.imageSrc;
+    this.origSrc.src = inputSrc;
 
-    document.styleSheets[0].addRule(`.${styles['overlay-inner']}::before`, `height: ${nextProps.resultHeight + 4}px`);
-    document.styleSheets[0].addRule(`.${styles['overlay-inner']}::after`, `height: ${nextProps.resultHeight + 4}px`);
-    document.styleSheets[0].addRule(`.${styles.overlay}::before`, `width: ${nextProps.resultWidth + 4}px`);
-    document.styleSheets[0].addRule(`.${styles.overlay}::after`, `width: ${nextProps.resultWidth + 4}px`);
+    document.styleSheets[0].addRule(`.${styles['overlay-inner']}::before`, `height: ${resultHeight + 4}px`);
+    document.styleSheets[0].addRule(`.${styles['overlay-inner']}::after`, `height: ${resultHeight + 4}px`);
+    document.styleSheets[0].addRule(`.${styles.overlay}::before`, `width: ${resultWidth + 4}px`);
+    document.styleSheets[0].addRule(`.${styles.overlay}::after`, `width: ${resultWidth + 4}px`);
     this.setState({
-      resultWidth: nextProps.resultWidth,
-      resultHeight: nextProps.resultHeight,
+      resultWidth,
+      resultHeight,
     });
+
+    const rect = this.resizeContainerRef.getBoundingClientRect();
+    this.initContainerTop = rect.top + document.body.scrollTop;
+    this.resizeImageOnce = false;
   }
-  handleCropButtonClick(e) {
+  handleCropButtonClicked(e) {
+    e.preventDefault();
+    e.stopPropagation();
     const rectOverlay = this.overlayRef.getBoundingClientRect();
     const rectContainer = this.resizeContainerRef.getBoundingClientRect();
     const left = rectOverlay.left - rectContainer.left;
     const top = rectOverlay.top - rectContainer.top;
-    const width = this.overlayRef.offsetWidth;
-    const height = this.overlayRef.offsetHeight;
+    // const width = this.overlayRef.offsetWidth;
+    // const height = this.overlayRef.offsetHeight;
+    const width = this.state.resultWidth;
+    const height = this.state.resultHeight;
     const cropCanvas = document.createElement('canvas');
     cropCanvas.width = width;
     cropCanvas.height = height;
 
+
     cropCanvas.getContext('2d').drawImage(this.resizeImageRef, left, top, width, height, 0, 0, width, height);
-    // window.open(cropCanvas.toDataURL('image/png'));
+    // window.open(cropCanvas.toDataURL('image/jpeg'));
+    this.outputRef.src = cropCanvas.toDataURL('image/jpeg');
+  }
+  handleGetCropClicked(e) {
     e.preventDefault();
-    this.props.handleCropButtonClick(e, cropCanvas.toDataURL('image/png'));
+    e.stopPropagation();
+    this.props.getResult(e, this.outputRef.src);
   }
   startResize(e) {
     e.preventDefault();
@@ -106,20 +122,20 @@ class ImageCropper extends Component {
     mouse.y = (e.clientY || e.pageY) + document.body.scrollTop;
 
     if (this.hasClass(this.eventState.evnt.target, styles['resize-handle-se'])) {
-      width = mouse.x - this.eventState.containerLeft;
-      height = mouse.y - this.eventState.containerTop;
+      // width = mouse.x - this.eventState.containerLeft;
+      // height = mouse.y - this.eventState.containerTop;
       left = this.eventState.containerLeft;
       top = this.eventState.containerTop;
       this.endMoving(e);
     } else if (this.hasClass(this.eventState.evnt.target, styles['resize-handle-sw'])) {
-      width = this.eventState.containerWidth - (mouse.x - this.eventState.containerLeft);
-      height = mouse.y - this.eventState.containerTop;
+      // width = this.eventState.containerWidth - (mouse.x - this.eventState.containerLeft);
+      // height = mouse.y - this.eventState.containerTop;
       left = mouse.x;
       top = this.eventState.containerTop;
       this.endMoving(e);
     } else if (this.hasClass(this.eventState.evnt.target, styles['resize-handle-nw'])) {
-      width = this.eventState.containerWidth - (mouse.x - this.eventState.containerLeft);
-      height = this.eventState.containerHeight - (mouse.y - this.eventState.containerTop);
+      // width = this.eventState.containerWidth - (mouse.x - this.eventState.containerLeft);
+      // height = this.eventState.containerHeight - (mouse.y - this.eventState.containerTop);
       left = mouse.x;
       top = mouse.y;
       if (this.constrain || e.shiftKey) {
@@ -127,8 +143,8 @@ class ImageCropper extends Component {
       }
       this.endMoving(e);
     } else if (this.hasClass(this.eventState.evnt.target, styles['resize-handle-ne'])) {
-      width = mouse.x - this.eventState.containerLeft;
-      height = this.eventState.containerHeight - (mouse.y - this.eventState.containerTop);
+      // width = mouse.x - this.eventState.containerLeft;
+      // height = this.eventState.containerHeight - (mouse.y - this.eventState.containerTop);
       left = this.eventState.containerLeft;
       top = mouse.y;
       if (this.constrain || e.shiftKey) {
@@ -153,11 +169,17 @@ class ImageCropper extends Component {
     this.resizeCanvas.width = width;
     this.resizeCanvas.height = height;
     this.resizeCanvas.getContext('2d').drawImage(this.origSrc, 0, 0, width, height);
-    this.resizeImageRef.setAttribute('src', this.resizeCanvas.toDataURL('image/png'));
+    this.resizeImageRef.setAttribute('src', this.resizeCanvas.toDataURL('image/jpeg'));
   }
   startMoving(e) {
     e.preventDefault();
     e.stopPropagation();
+
+    if (!this.resizeImageOnce) {
+    // resize image first
+      this.resizeImage(this.state.resultWidth, this.state.resultWidth / this.origSrc.width * this.origSrc.height);
+      this.resizeImageOnce = true;
+    }
     this.saveEventState(e);
     document.addEventListener('mousemove', this.moving);
     document.addEventListener('mouseup', this.endMoving);
@@ -176,8 +198,8 @@ class ImageCropper extends Component {
     this.resizeContainerRef.style.left = mouse.x - (this.eventState.mouse_x - this.eventState.containerLeft);
     this.resizeContainerRef.style.top = mouse.y - (this.eventState.mouse_y - this.eventState.containerTop);
     this.setState({
-      containerLeft: mouse.x - (this.eventState.mouse_x - this.eventState.containerLeft),
-      containerTop: mouse.y - (this.eventState.mouse_y - this.eventState.containerTop),
+      // containerLeft: mouse.x - (this.eventState.mouse_x - this.eventState.containerLeft),
+      containerTop: mouse.y - this.eventState.mouse_y + this.eventState.containerTop - this.initContainerTop,
     });
     // console.log(mouse.x);
     // console.log(this.eventState.mouse_x);
@@ -189,32 +211,37 @@ class ImageCropper extends Component {
     return (` ${element.className} `).indexOf(` ${className} `) > -1;
   }
   render() {
-    const { imageSrc, handleExitCropClick } = this.props;
+    const { inputSrc } = this.props;
     return (
       <div className={styles.wrapper}>
-        <div className={styles['crop-wrapper']}>
+        <div className={styles['crop-wrapper']} style={{ height: this.props.wrapperHeight, width: this.props.wrapperWidth }}>
           <div className={styles.overlay} id="overlay" style={{ width: this.state.resultWidth, height: this.state.resultHeight }}ref={overlayRef => { this.overlayRef = overlayRef; }}>
             <div className={styles['overlay-inner']} ref={overlayInnerRef => { this.overlayInnerRef = overlayInnerRef; }}></div>
           </div>
           <div id="resize-container" className={styles['resize-container']} ref={resizeContainerRef => { this.resizeContainerRef = resizeContainerRef; }} style={{ left: this.state.containerLeft, top: this.state.containerTop }}>
             <span className={`${styles['resize-handle']} ${styles['resize-handle-nw']}`}></span>
             <span className={`${styles['resize-handle']} ${styles['resize-handle-ne']}`}></span>
-            <img src={imageSrc} alt="hinh" className={styles['resize-image']} id="resize-image" ref={resizeImageRef => { this.resizeImageRef = resizeImageRef; }} />
+            <img src={inputSrc} alt="hinh" className={styles['resize-image']} id="resize-image" ref={resizeImageRef => { this.resizeImageRef = resizeImageRef; }} />
             <span className={`${styles['resize-handle']} ${styles['resize-handle-sw']}`}></span>
             <span className={`${styles['resize-handle']} ${styles['resize-handle-se']}`}></span>
           </div>
-          <button onClick={this.handleCropButtonClick} className={`${styles['btn-crop']} ${styles['js-crop']}`} id="js-crop">Crop</button>
-          <button onClick={handleExitCropClick} className={`${styles['btn-exit']} ${styles['js-crop']}`} >Exit</button>
         </div>
+        <div >
+          <button onClick={this.handleCropButtonClicked} className={`${styles['btn-crop']} ${styles['js-crop']}`} id="js-crop">Crop this image</button>
+          <button onClick={this.handleGetCropClicked} className={`${styles['btn-exit']} ${styles['js-crop']}`} >Get this crop</button>
+          <img ref={outputRef => { this.outputRef = outputRef; }} alt="Result" />
+        </div>
+        <div className={styles.clear}></div>
       </div>
     );
   }
 }
 
 ImageCropper.propTypes = {
-  imageSrc: PropTypes.string,
-  handleCropButtonClick: PropTypes.func,
-  handleExitCropClick: PropTypes.func,
+  inputSrc: PropTypes.string,
+  getResult: PropTypes.func,
+  wrapperHeight: PropTypes.number,
+  wrapperWidth: PropTypes.number,
 };
 
 export default ImageCropper;
