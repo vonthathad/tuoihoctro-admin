@@ -213,7 +213,7 @@ exports.create = async (req, res) => {
     const isGif = post.type === 1;
     const media64 = post.mediaSrc.replace(/^data:(video|image)\/(jpeg|mp4);base64,/, '');
     const mediaPath = `${basePath}${newId}_m.${isGif ? 'mp4' : 'jpeg'}`;
-    const mediaWMPath = `${basePath}../_wm/wm_m.png`;
+    const mediaWMPath = `${basePath}../../_wm/wm_m.png`;
     await writeFileFromByte64(mediaPath, media64);
     if (!isGif) {
       const mediaResizePath = `${basePath}${newId}_mr.jpeg`;
@@ -276,7 +276,7 @@ exports.update = async (req, res) => {
     if (post.mediaSrc) {
       const media64 = post.mediaSrc.replace(/^data:(video|image)\/(jpeg|mp4);base64,/, '');
       const mediaPath = `${basePath}${currentId}_m.${isGif ? 'mp4' : 'jpeg'}`;
-      const mediaWMPath = `${basePath}../_wm/wm_m.png`;
+      const mediaWMPath = `${basePath}../../_wm/wm_m.png`;
       await removeF(`${basePath}${currentId}_m.mp4`);
       await removeF(`${basePath}${currentId}_m.jpeg`);
       await writeFileFromByte64(mediaPath, media64);
@@ -378,7 +378,7 @@ exports.gif2mp4 = async (req, res) => {
   // console.log(req.body);
   let gif64 = req.body.gif64;
   gif64 = gif64.replace(/^data:(video|image)\/(jpeg|mp4|gif);base64,/, '');
-  const basePath = `${storeDir}_temp_gif/`;
+  const basePath = `${storeDir}../_temp_gif/`;
   const gifPath = `${basePath}${Math.round(Math.random() * 100000)}.gif`;
   try {
     await writeFileFromByte64(gifPath, gif64);
