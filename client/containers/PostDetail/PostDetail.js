@@ -332,6 +332,7 @@ class PostDetail extends Component {
     // console.log(`${this.state.baseUrl}${this.props.params.postId}/${this.props.params.postId}_m.jpeg`);
     // console.log(this.state.post.thumbSrc);
     const { post } = this.state;
+    console.log(post);
     const { processing } = this.props.postDetail;
     let typeName;
     switch (parseInt(post.type, 10)) {
