@@ -66,7 +66,7 @@ class PostList extends Component {
   }
   render() {
     const posts = this.state.posts;
-    // console.log(posts);
+    console.log(posts);
     return (
       <div>
         <div>
@@ -115,17 +115,17 @@ class PostList extends Component {
                         <video
                           loop
                           controls
-                          src={`${post.mediaContent ? post.mediaContent : `${this.baseUrl}${post._id}/${post._id}_m.mp4`}`}
+                          src={`${!post.mh ? post.mediaContent : `${this.baseUrl}${post._id}/${post._id}_m.mp4`}`}
                           type="video/mp4"
                         >
                         </video>
                         {/* <img src={`${post.mediaContent}`} alt={post.mediaContent} className={styles.images} />*/}
                       </td>
                     :
-                      <td><img src={`${post.mediaContent ? post.mediaContent : `${this.baseUrl}${post._id}/${post._id}_m.jpeg`}`} alt={post.mediaContent} className={styles.images} /></td>
+                      <td><img src={`${!post.mh ? post.mediaContent : `${this.baseUrl}${post._id}/${post._id}_m.jpeg`}`} alt={post.mediaContent} className={styles.images} /></td>
                   }
-                  <td><img src={post.thumb ? post.thumb : `${this.baseUrl}${post._id}/${post._id}_t.jpeg`} alt={post.thumb} className={styles.images} /></td>
-                  <td><img src={post.smallThumb ? post.smallThumb : `${this.baseUrl}${post._id}/${post._id}_r.jpeg`} alt={post.smallThumb} className={styles.images} /></td>
+                  <td><img src={!post.mh ? post.thumb : `${this.baseUrl}${post._id}/${post._id}_t.jpeg`} alt={post.thumb} className={styles.images} /></td>
+                  <td><img src={!post.mh ? post.smallThumb : `${this.baseUrl}${post._id}/${post._id}_r.jpeg`} alt={post.smallThumb} className={styles.images} /></td>
                   <td>{`${post.votes && post.votes.length} / ${post.view} / ${post.shares && post.shares.length} / ${post.reports && post.reports.length}`}</td>
                   <td>{post.publish ? 'true' : 'false'}</td>
                   <td>{new Date(post.created).toLocaleString()}</td>

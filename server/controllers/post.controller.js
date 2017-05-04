@@ -61,6 +61,7 @@ exports.listPosts = (req, res) => {
     title: 1, type: 1, categories: 1,
     mediaContent: 1, mediaContentLQ: 1, mediaContentHeight: 1, mediaContentWidth: 1,
     thumb: 1, thumbLQ: 1, thumbHeight: 1, thumbWidth: 1,
+    mh:1,
     smallThumb: 1, smallThumbLQ: 1, smallThumbHeight: 1, smallThumbWidth: 1,
     created: 1, description: 1, shares: 1, follows: 1, view: 1, votes: 1, point: 1, creator: 1,
   };
