@@ -212,7 +212,7 @@ class PostDetail extends Component {
                 const width = img.naturalWidth;
                 const height = img.naturalHeight;
                 console.log(width);
-                if (width >= 600) {
+                if (width >= 460) {
                   // resize image
                   const cropCanvas = document.createElement('canvas');
                   const mediaHeight = 600 / width * height;
