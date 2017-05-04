@@ -298,7 +298,7 @@ exports.update = async (req, res) => {
     if (post.thumbSrc && post.thumbSrc !== 'empty') {
       const thumb64 = post.thumbSrc.replace(/^data:image\/jpeg;base64,/, '');
       const thumbPath = `${basePath}${currentId}_t.jpeg`;
-      const thumbWMPath = `${basePath}../_wm/wm_t.png`;
+      const thumbWMPath = `${basePath}../../_wm/wm_t.png`;
       const thumbResizePath = `${basePath}${currentId}_tr.jpeg`;
       await removeF(thumbPath);
       await writeFileFromByte64(thumbPath, thumb64);
