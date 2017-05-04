@@ -19,7 +19,8 @@ class PostList extends Component {
       posts: [],
       paging: 10,
     };
-    this.baseUrl = window.location.hostname === 'localhost' ? 'http://localhost:4000/posts_data/' : 'http://tuoihoctro.co/posts_data/';
+    // this.baseUrl = window.location.hostname === 'localhost' ? 'http://localhost:4000/posts_data/' : 'http://tuoihoctro.co/posts_data/';
+    this.baseUrl = 'http://tuoihoctro.co/posts_data/';
     this.handleSelect = this.handleSelect.bind(this);
     this.handlePostDelete = this.handlePostDelete.bind(this);
     this.handlePagingChange = this.handlePagingChange.bind(this);
@@ -66,7 +67,7 @@ class PostList extends Component {
   }
   render() {
     const posts = this.state.posts;
-    console.log(posts);
+    // console.log(posts);
     return (
       <div>
         <div>
@@ -96,7 +97,7 @@ class PostList extends Component {
                 <th>Media</th>
                 <th>Thumb</th>
                 <th>Recommend</th>
-                <th>Vote / Views / Shares / Reports Count</th>
+                {/* <th>Vote / Views / Shares / Reports Count</th>*/}
                 <th>Publish</th>
                 <th>Created</th>
                 <th>Commands</th>
@@ -115,18 +116,18 @@ class PostList extends Component {
                         <video
                           loop
                           controls
-                          src={`${!post.mh ? post.mediaContent : `${this.baseUrl}${post._id}/${post._id}_m.mp4`}`}
+                          src={`${this.baseUrl}${post._id}/${post._id}_m.mp4`}
                           type="video/mp4"
                         >
                         </video>
                         {/* <img src={`${post.mediaContent}`} alt={post.mediaContent} className={styles.images} />*/}
                       </td>
                     :
-                      <td><img src={`${!post.mh ? post.mediaContent : `${this.baseUrl}${post._id}/${post._id}_m.jpeg`}`} alt={post.mediaContent} className={styles.images} /></td>
+                      <td><img src={`${this.baseUrl}${post._id}/${post._id}_m.jpeg`} alt={post.mediaContent} className={styles.images} /></td>
                   }
-                  <td><img src={!post.mh ? post.thumb : `${this.baseUrl}${post._id}/${post._id}_t.jpeg`} alt={post.thumb} className={styles.images} /></td>
-                  <td><img src={!post.mh ? post.smallThumb : `${this.baseUrl}${post._id}/${post._id}_r.jpeg`} alt={post.smallThumb} className={styles.images} /></td>
-                  <td>{`${post.votes && post.votes.length} / ${post.view} / ${post.shares && post.shares.length} / ${post.reports && post.reports.length}`}</td>
+                  <td><img src={`${this.baseUrl}${post._id}/${post._id}_t.jpeg`} alt={post.thumb} className={styles.images} /></td>
+                  <td><img src={`${this.baseUrl}${post._id}/${post._id}_r.jpeg`} alt={post.smallThumb} className={styles.images} /></td>
+                  {/* <td>{`${post.votes && post.votes.length} / ${post.view} / ${post.shares && post.shares.length} / ${post.reports && post.reports.length}`}</td>*/}
                   <td>{post.publish ? 'true' : 'false'}</td>
                   <td>{new Date(post.created).toLocaleString()}</td>
                   <td>

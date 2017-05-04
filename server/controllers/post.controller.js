@@ -58,12 +58,8 @@ exports.listPosts = (req, res) => {
   // https://medium.com/hacking-and-gonzo/how-reddit-ranking-algorithms-work-ef111
   // e33d0d9#.hkka5wx3i
   const project = {
-    title: 1, type: 1, categories: 1,
-    mediaContent: 1, mediaContentLQ: 1, mediaContentHeight: 1, mediaContentWidth: 1,
-    thumb: 1, thumbLQ: 1, thumbHeight: 1, thumbWidth: 1,
-    mh:1,
-    smallThumb: 1, smallThumbLQ: 1, smallThumbHeight: 1, smallThumbWidth: 1,
-    created: 1, description: 1, shares: 1, follows: 1, view: 1, votes: 1, point: 1, creator: 1,
+    title: 1, type: 1, cate: 1,
+    created: 1, shares: 1, view: 1, votes: 1, point: 1, creator: 1, reports: 1, publish: 1,
   };
   Post.aggregate([
     { $match: match },
@@ -114,7 +110,7 @@ function cloneResize15(inputPath, outputPath) {
 
 const compressJPG = (inputPath) => {
   return new Promise((resolve, reject) => {
-    childProcess.exec(`jpegoptim --max=55 -s ${inputPath} `, (err) => {
+    childProcess.exec(`jpegoptim --strip-all --preserve --totals --max=75 -s ${inputPath} `, (err) => {
       if (err) { reject({ code: 500, err }); return; }
       resolve();
     });
@@ -248,10 +244,10 @@ exports.create = async (req, res) => {
     if (post.recommendSrc && post.recommendSrc !== 'empty') {
       const recommend64 = post.recommendSrc.replace(/^data:image\/jpeg;base64,/, '');
       const recommendPath = `${basePath}${newId}_r.jpeg`;
-      const recommendWMPath = `${basePath}../_wm/wm_r.png`;
+      // const recommendWMPath = `${basePath}../_wm/wm_r.png`;
       const recommendResizePath = `${basePath}${newId}_rr.jpeg`;
       await writeFileFromByte64(recommendPath, recommend64);
-      await addWM2Img(recommendPath, recommendWMPath);
+      // await addWM2Img(recommendPath, recommendWMPath);
       await cloneResize15(recommendPath, recommendResizePath);
       await compressJPG(recommendPath);
       await compressJPG(recommendResizePath);
@@ -315,11 +311,11 @@ exports.update = async (req, res) => {
     if (post.recommendSrc && post.recommendSrc !== 'empty') {
       const recommend64 = post.recommendSrc.replace(/^data:image\/jpeg;base64,/, '');
       const recommendPath = `${basePath}${currentId}_r.jpeg`;
-      const recommendWMPath = `${basePath}../_wm/wm_r.png`;
+      // const recommendWMPath = `${basePath}../_wm/wm_r.png`;
       const recommendResizePath = `${basePath}${currentId}_rr.jpeg`;
       await removeF(recommendPath);
       await writeFileFromByte64(recommendPath, recommend64);
-      await addWM2Img(recommendPath, recommendWMPath);
+      // await addWM2Img(recommendPath, recommendWMPath);
       await cloneResize15(recommendPath, recommendResizePath);
       await compressJPG(recommendPath);
       await compressJPG(recommendResizePath);

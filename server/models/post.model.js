@@ -37,7 +37,7 @@ const PostSchema = new Schema({
     default: 0,
   },
   reports: [{
-    type: Number,
+    type: String,
     default: [],
   }],
   votes: [{

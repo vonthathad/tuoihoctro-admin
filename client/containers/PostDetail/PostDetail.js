@@ -28,7 +28,8 @@ class PostDetail extends Component {
         created: '',
         cate: 0,
       },
-      baseUrl: window.location.hostname === 'localhost' ? 'http://localhost:4000/posts_data/' : 'http://tuoihoctro.co/posts_data/',
+      // baseUrl: window.location.hostname === 'localhost' ? 'http://localhost:4000/posts_data/' : 'http://tuoihoctro.co/posts_data/',
+      baseUrl: 'http://tuoihoctro.co/posts_data/',
       imageHeight: 0,
       imageWidth: 0,
       mediaWarning: '',
@@ -79,7 +80,7 @@ class PostDetail extends Component {
           mediaSrc: mp464 !== '' ? mp464 : data.mediaSrc,
           type: mp464 !== '' ? 1 : data.type,
           cate: data.cate ? data.cate : 0,
-        }
+        },
       });
     }
   }
@@ -202,6 +203,7 @@ class PostDetail extends Component {
               img.onload = () => {
                 const width = img.naturalWidth;
                 const height = img.naturalHeight;
+                console.log(width);
                 if (width >= 600) {
                   // resize image
                   const cropCanvas = document.createElement('canvas');
@@ -249,7 +251,7 @@ class PostDetail extends Component {
                       ...this.state.post,
                       mediaSrc: '',
                     },
-                    mediaWarning: 'Sai kích thước hình 960 x 500.',
+                    mediaWarning: 'Chiều rộng phải lớn hơn 600.',
                   });
                 }
               };

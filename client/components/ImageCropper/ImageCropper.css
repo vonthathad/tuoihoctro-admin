@@ -15,7 +15,7 @@
     display: inline-block;
     cursor: move;
     margin: 0 auto;
-    margin-left: 2px;
+    margin-left: 0px;
 }
 
 .resize-container img {
