@@ -5,6 +5,5 @@ npm-debug.log
 dump.rdb
 .vscode/
 public/posts_data/*
-dist
 coverage/
 .nyc_output/
