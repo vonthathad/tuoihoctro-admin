@@ -4,7 +4,7 @@ npm-debug.log
 .idea/
 dump.rdb
 .vscode/
-public/uploaded/*
+public/posts_data/*
 dist
 coverage/
 .nyc_output/
