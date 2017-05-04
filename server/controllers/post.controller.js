@@ -116,9 +116,10 @@ const compressJPG = (inputPath) => {
     });
   });
 };
-const optiMp4 = (inputPath) => {
+const optiMp4 = (path) => {
   return new Promise((resolve, reject) => {
-    childProcess.exec(`ffmpeg -i ${inputPath} -movflags faststart -acodec copy -vcodec copy ${inputPath} -y `, (err) => {
+    const tempPath = `${path.split('.mp4')[0]}x.mp4`;
+    childProcess.exec(`ffmpeg -i ${path} -movflags faststart -acodec copy -vcodec copy -an -strict -2 ${tempPath} -y && mv ${tempPath} ${path} `, (err) => {
       if (err) { reject({ code: 500, err }); return; }
       resolve();
     });
@@ -143,7 +144,7 @@ const getImgHeight = (path) => {
 const resizeMp4 = (path) => {
   return new Promise((resolve, reject) => {
     const tempPath = `${path.split('.mp4')[0]}x.mp4`;
-    childProcess.exec(`ffmpeg -i ${path} -vf scale=600:-1 ${tempPath} -y && mv ${tempPath} ${path}`, (err, stdout) => {
+    childProcess.exec(`ffmpeg -i ${path} -vf scale=600:-1 -strict -2 ${tempPath} -y && mv ${tempPath} ${path}`, (err, stdout) => {
       if (err) { reject({ code: 500, err }); return; }
       resolve(stdout);
     });
@@ -160,7 +161,7 @@ const addWM2Img = (path, WMPath) => {
 const addWM2Mp4 = (path, WMPath) => {
   return new Promise((resolve, reject) => {
     const tempPath = `${path.split('.mp4')[0]}x.mp4`;
-    childProcess.exec(`ffmpeg -i ${path} -i ${WMPath} -filter_complex "overlay=main_w/2-overlay_w/2:main_h-overlay_h" ${tempPath} -y && mv ${tempPath} ${path}`, (err, stdout) => {
+    childProcess.exec(`ffmpeg -i ${path} -i ${WMPath} -filter_complex "[0:v]scale=trunc(iw/2)*2:trunc(ih/2)*2[bg];[bg][1:v]overlay=main_w/2-overlay_w/2:main_h-overlay_h"  -strict -2 ${tempPath} -y && mv ${tempPath} ${path}`, (err, stdout) => {
       if (err) { reject({ code: 500, err }); return; }
       resolve(stdout);
     });
@@ -221,9 +222,9 @@ exports.create = async (req, res) => {
       await compressJPG(mediaPath);
       await compressJPG(mediaResizePath);
     } else {
-      // await optiMp4(mediaPath);
       await resizeMp4(mediaPath);
       await addWM2Mp4(mediaPath, mediaWMPath);
+      // await optiMp4(mediaPath);
     }
     const mh = !isGif ? await getImgHeight(mediaPath) : 0;
 
@@ -286,9 +287,9 @@ exports.update = async (req, res) => {
         await compressJPG(mediaPath);
         await compressJPG(mediaResizePath);
       } else {
-        // await optiMp4(mediaPath);
         await resizeMp4(mediaPath);
         await addWM2Mp4(mediaPath, mediaWMPath);
+        await optiMp4(mediaPath);
       }
       mh = !isGif ? await getImgHeight(mediaPath) : 0;
     }
@@ -340,14 +341,14 @@ function removePost(post) {
 }
 exports.remove = async (req, res) => {
   const post = req.post;
-  if (post.processed) {
-    const basePath = `${storeDir}${post._id}/`;
-    await removeF(basePath);
-    await removePost(post);
-    await requestOK(res, post);
-  } else {
-    res.status(403).send('File is not processed');
-  }
+  // if (post.processed) {
+  const basePath = `${storeDir}${post._id}/`;
+  await removeF(basePath);
+  await removePost(post);
+  await requestOK(res, post);
+  // } else {
+  //   res.status(403).send('File is not processed');
+  // }
   return;
 };
 exports.count = async (req, res) => {

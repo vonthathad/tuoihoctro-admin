@@ -73,7 +73,7 @@ class PostDetail extends Component {
     }
     // console.log(data);
     if (this.props.params.postId && this.props.postDetail.post !== data) {
-      console.log(data.cate);
+      // console.log(data.cate);
       this.setState({
         post: {
           ...data,
@@ -85,6 +85,7 @@ class PostDetail extends Component {
     } else if (mp464 !== this.state.post.mediaSrc) {
       this.setState({
         post: {
+          ...this.state.post,
           mediaSrc: mp464 !== '' ? mp464 : data.mediaSrc,
           type: mp464 !== '' ? 1 : data.type,
         },
@@ -341,7 +342,7 @@ class PostDetail extends Component {
     // console.log(`${this.state.baseUrl}${this.props.params.postId}/${this.props.params.postId}_m.jpeg`);
     // console.log(this.state.post.thumbSrc);
     const { post } = this.state;
-    console.log(post);
+    // console.log(post);
     const { processing } = this.props.postDetail;
     let typeName;
     switch (parseInt(post.type, 10)) {
