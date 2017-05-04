@@ -28,7 +28,6 @@ class PostDetail extends Component {
         created: '',
         cate: 0,
       },
-      gifToMp4Processing: false,
       baseUrl: window.location.hostname === 'localhost' ? 'http://localhost:4000/posts_data/' : 'http://tuoihoctro.co/posts_data/',
       imageHeight: 0,
       imageWidth: 0,
@@ -74,20 +73,13 @@ class PostDetail extends Component {
     // console.log(data);
     if (this.props.params.postId && this.props.postDetail.post !== data) {
       // console.log(data);
-      this.setState({ post: { ...data } });
-    }
-    // console.log(this.state.gifToMp4Processing);
-    if (this.state.gifToMp4Processing) {
-      this.setState(
-        {
-          post:
-          {
-            ...this.state.post,
-            mediaSrc: mp464,
-            type: 1,
-          },
-          gifToMp4Processing: false,
-        });
+      this.setState({
+        post: {
+          ...data,
+          mediaSrc: mp464 !== '' ? mp464 : data.mediaSrc,
+          type: mp464 !== '' ? 1 : data.type,
+        }
+      });
     }
   }
   shouldComponentUpdate(nextProps) {
@@ -189,7 +181,7 @@ class PostDetail extends Component {
         },
       });
       const extension = input.value.substring(
-                    input.value.lastIndexOf('.') + 1).toLowerCase();
+        input.value.lastIndexOf('.') + 1).toLowerCase();
       if (extension === 'png' || extension === 'jpg') {
         if (input.files && input.files[0]) {
           if (input.files[0].size > 10000000) {
@@ -305,9 +297,6 @@ class PostDetail extends Component {
             reader.onload = (e1) => {
               // console.log(e1.target.result);
               this.props._gif2mp4({ gif64: e1.target.result });
-              this.setState({
-                gifToMp4Processing: true,
-              });
             };
             reader.readAsDataURL(input.files[0]);
           }
@@ -383,12 +372,12 @@ class PostDetail extends Component {
           />
           <div>
             <label htmlFor="">Media </label>
-             {
+            {
               post.type === 1 ?
                 <video loop controls type="video/mp4" src={this.state.post.mediaSrc ? this.state.post.mediaSrc : `${this.state.baseUrl}${this.props.params.postId}/${this.props.params.postId}_m.mp4`} > </video>
-              :
+                :
                 <img src={this.state.post.mediaSrc ? this.state.post.mediaSrc : this.props.params.postId && `${this.state.baseUrl}${this.props.params.postId}/${this.props.params.postId}_m.jpeg`} alt="" />
-             }
+            }
           </div>
           {
             post.type === 1 ?
@@ -421,13 +410,13 @@ class PostDetail extends Component {
                   </div>
                 </div>
               </div>
-            :
+              :
               <div>
                 <div>
                   <label htmlFor="">Thumb </label>
                   <img src={this.state.post.thumbSrc ? this.state.post.thumbSrc : this.props.params.postId && `${this.state.baseUrl}${this.props.params.postId}/${this.props.params.postId}_t.jpeg`} alt="" />
                   {
-                   post.type === 2 && <button onClick={this.turnOnThumbCropper}>Crop image to thumb</button>
+                    post.type === 2 && <button onClick={this.turnOnThumbCropper}>Crop image to thumb</button>
                   }
                   <div style={{ display: this.state.cropperThumbTurnedOn ? 'block' : 'none' }}>
                     <ImageCropper

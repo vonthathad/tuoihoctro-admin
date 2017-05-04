@@ -386,6 +386,7 @@ exports.gif2mp4 = async (req, res) => {
   try {
     await writeFileFromByte64(gifPath, gif64);
     await gifToMp4(gifPath);
+    await resizeMp4(gifPath);
     let byte64mp4 = await (file2Byte64(gifPath));
     await removeF(gifPath);
     byte64mp4 = `data:video/mp4;base64,${byte64mp4}`;
