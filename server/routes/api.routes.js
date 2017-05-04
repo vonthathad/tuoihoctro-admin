@@ -28,7 +28,7 @@ router.post('/gif2mp4', posts.gif2mp4);
 router.route('/posts/:postID')
   .get(posts.get)
   .put(posts.update)
-  .delete(admins.requiresLogin, posts.remove);
+  .delete(posts.remove);
 router.param('postID', posts.postByID);
 
 export default router;
