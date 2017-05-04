@@ -5,7 +5,7 @@ import fetch from 'isomorphic-fetch';
 //   process.env.baseUrl || (`http://localhost:${process.env.PORT || Config.port}`) :
 //   'http://localhost:4000';
 export const BASE_URL = (process.env.NODE_ENV === 'development' || typeof(window) !== 'undefined' && window.location.href.indexOf('localhost') !== -1) ?
-  'http://localhost:4001' : 'http://tuoihoctro.co';
+  'http://localhost:3999' : 'http://tuoihoctro.co';
 
 function request(options) {
   // set partial url to full url
