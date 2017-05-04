@@ -29,7 +29,7 @@ class PostDetail extends Component {
         cate: 0,
       },
       gifToMp4Processing: false,
-      baseUrl: 'http://localhost:4000/posts_data/',
+      baseUrl: `${window.location.hostname}/posts_data/`,
       imageHeight: 0,
       imageWidth: 0,
       mediaWarning: '',
