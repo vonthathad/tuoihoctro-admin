@@ -19,6 +19,7 @@ class PostList extends Component {
       posts: [],
       paging: 10,
     };
+    this.baseUrl = window.location.hostname === 'localhost' ? 'http://localhost:4000/posts_data/' : 'http://tuoihoctro.co/posts_data/';
     this.handleSelect = this.handleSelect.bind(this);
     this.handlePostDelete = this.handlePostDelete.bind(this);
     this.handlePagingChange = this.handlePagingChange.bind(this);
@@ -114,17 +115,17 @@ class PostList extends Component {
                         <video
                           loop
                           controls
-                          src={`${post.mediaContent ? post.mediaContent : `${window.location.hostname}/posts_data/${post._id}/${post._id}_m.mp4`}`}
+                          src={`${post.mediaContent ? post.mediaContent : `${this.baseUrl}${post._id}/${post._id}_m.mp4`}`}
                           type="video/mp4"
                         >
                         </video>
                         {/* <img src={`${post.mediaContent}`} alt={post.mediaContent} className={styles.images} />*/}
                       </td>
                     :
-                      <td><img src={`${post.mediaContent ? post.mediaContent : `${window.location.hostname}/posts_data/${post._id}/${post._id}_m.jpeg`}`} alt={post.mediaContent} className={styles.images} /></td>
+                      <td><img src={`${post.mediaContent ? post.mediaContent : `${this.baseUrl}${post._id}/${post._id}_m.jpeg`}`} alt={post.mediaContent} className={styles.images} /></td>
                   }
-                  <td><img src={post.thumb ? post.thumb : `${window.location.hostname}/posts_data/${post._id}/${post._id}_t.jpeg`} alt={post.thumb} className={styles.images} /></td>
-                  <td><img src={post.smallThumb ? post.smallThumb : `${window.location.hostname}/posts_data/${post._id}/${post._id}_r.jpeg`} alt={post.smallThumb} className={styles.images} /></td>
+                  <td><img src={post.thumb ? post.thumb : `${this.baseUrl}${post._id}/${post._id}_t.jpeg`} alt={post.thumb} className={styles.images} /></td>
+                  <td><img src={post.smallThumb ? post.smallThumb : `${this.baseUrl}${post._id}/${post._id}_r.jpeg`} alt={post.smallThumb} className={styles.images} /></td>
                   <td>{`${post.votes && post.votes.length} / ${post.view} / ${post.shares && post.shares.length} / ${post.reports && post.reports.length}`}</td>
                   <td>{post.publish ? 'true' : 'false'}</td>
                   <td>{new Date(post.created).toLocaleString()}</td>
