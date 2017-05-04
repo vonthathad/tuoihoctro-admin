@@ -3,7 +3,8 @@
   "version": "2.0.0",
   "description": "Boilerplate project for building Isomorphic apps using React and Redux",
   "scripts": {
-    "dev": "cross-env NODE_ENV=development webpack-dev-server --config=webpack.config.dev.js --inline --content-base . --history-api-fallback",
+    "dev-c": "cross-env NODE_ENV=development webpack-dev-server --config=webpack.config.dev.js --inline --content-base . --history-api-fallback",
+    "dev-s": "cross-env BABEL_DISABLE_CACHE=0 NODE_ENV=development nodemon index.js",
     "start:prod": "cross-env NODE_ENV=production node index.js",
     "bs": "npm run build && npm run build:server && npm run start:prod",
     "build": "cross-env NODE_ENV=production webpack --config=webpack.config.prod.js",
