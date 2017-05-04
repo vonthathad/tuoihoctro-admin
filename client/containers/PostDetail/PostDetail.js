@@ -28,8 +28,9 @@ class PostDetail extends Component {
         created: '',
         cate: 0,
       },
-      // baseUrl: window.location.hostname === 'localhost' ? 'http://localhost:4000/posts_data/' : 'http://tuoihoctro.co/posts_data/',
-      baseUrl: 'http://tuoihoctro.co/posts_data/',
+      mp464: '',
+      baseUrl: window.location.hostname === 'localhost' ? 'http://localhost:4000/posts_data/' : 'http://tuoihoctro.co/posts_data/',
+      // baseUrl: 'http://tuoihoctro.co/posts_data/',
       imageHeight: 0,
       imageWidth: 0,
       mediaWarning: '',
@@ -73,14 +74,21 @@ class PostDetail extends Component {
     }
     // console.log(data);
     if (this.props.params.postId && this.props.postDetail.post !== data) {
-      console.log(data.cate);
+      console.log(mp464);
       this.setState({
         post: {
           ...data,
-          mediaSrc: mp464 !== '' ? mp464 : data.mediaSrc,
           type: mp464 !== '' ? 1 : data.type,
           cate: data.cate ? data.cate : 0,
         },
+        mp464,
+      });
+    } else if (this.state.mp464 !== mp464) {
+      this.setState({
+        post: {
+          type: mp464 !== '' ? 1 : data.type,
+        },
+        mp464,
       });
     }
   }
@@ -378,9 +386,9 @@ class PostDetail extends Component {
             <label htmlFor="">Media </label>
             {
               post.type === 1 ?
-                <video loop controls type="video/mp4" src={this.state.post.mediaSrc ? this.state.post.mediaSrc : `${this.state.baseUrl}${this.props.params.postId}/${this.props.params.postId}_m.mp4`} > </video>
+                <video loop controls type="video/mp4" src={`${this.state.baseUrl}${this.props.params.postId}/${this.props.params.postId}_m.mp4`} > </video>
                 :
-                <img src={this.state.post.mediaSrc ? this.state.post.mediaSrc : this.props.params.postId && `${this.state.baseUrl}${this.props.params.postId}/${this.props.params.postId}_m.jpeg`} alt="" />
+                <img src={this.props.params.postId && `${this.state.baseUrl}${this.props.params.postId}/${this.props.params.postId}_m.jpeg`} alt="" />
             }
           </div>
           {
@@ -392,7 +400,7 @@ class PostDetail extends Component {
                   <button onClick={this.turnOnThumbCropper}>Screenshot video to thumb</button>
                   <div style={{ display: this.state.cropperThumbTurnedOn ? 'block' : 'none' }}>
                     <VideoScreenShotter
-                      inputSrc={this.state.post.mediaSrc ? this.state.post.mediaSrc : this.props.params.postId && `${this.state.baseUrl}${this.props.params.postId}/${this.props.params.postId}_m.mp4`}
+                      inputSrc={this.state.mp464 !== '' ? this.state.mp464 : this.props.params.postId && `${this.state.baseUrl}${this.props.params.postId}/${this.props.params.postId}_m.mp4`}
                       getResult={this.handleThumbCreated}
                       anonymous={!this.state.post.mediaSrc && this.state.post.mediaSrc !== ''}
                     />
@@ -400,7 +408,7 @@ class PostDetail extends Component {
                 </div>
                 <div>
                   <label htmlFor="">Recommend </label>
-                  <img src={this.state.post.recommendSrc ? this.state.post.recommendSrc : this.props.params.postId && `${this.state.baseUrl}${this.props.params.postId}/${this.props.params.postId}_r.jpeg`} alt="" />
+                  <img src={this.props.params.postId && `${this.state.baseUrl}${this.props.params.postId}/${this.props.params.postId}_r.jpeg`} alt="" />
                   <button onClick={this.turnOnRecommendCropper}>Crop thumb to recommend</button>
                   <div style={{ display: this.state.cropperRecommendTurnedOn ? 'block' : 'none' }}>
                     <ImageCropper
@@ -408,7 +416,7 @@ class PostDetail extends Component {
                       wrapperHeight={157}
                       resultWidth={300}
                       resultHeight={157}
-                      inputSrc={this.state.post.thumbSrc !== '' ? this.state.post.thumbSrc : this.props.params.postId && `${this.state.baseUrl}${this.props.params.postId}/${this.props.params.postId}_t.jpeg`}
+                      inputSrc={this.props.params.postId && `${this.state.baseUrl}${this.props.params.postId}/${this.props.params.postId}_t.jpeg`}
                       getResult={this.handleRecommendCreated}
                     />
                   </div>
@@ -418,7 +426,7 @@ class PostDetail extends Component {
               <div>
                 <div>
                   <label htmlFor="">Thumb </label>
-                  <img src={this.state.post.thumbSrc ? this.state.post.thumbSrc : this.props.params.postId && `${this.state.baseUrl}${this.props.params.postId}/${this.props.params.postId}_t.jpeg`} alt="" />
+                  <img src={this.props.params.postId && `${this.state.baseUrl}${this.props.params.postId}/${this.props.params.postId}_t.jpeg`} alt="" />
                   {
                     post.type === 2 && <button onClick={this.turnOnThumbCropper}>Crop image to thumb</button>
                   }
@@ -428,14 +436,14 @@ class PostDetail extends Component {
                       wrapperHeight={300}
                       resultWidth={460}
                       resultHeight={300}
-                      inputSrc={this.state.post.mediaSrc ? this.state.post.mediaSrc : this.props.params.postId && `${this.state.baseUrl}${this.props.params.postId}/${this.props.params.postId}_m.jpeg`}
+                      inputSrc={this.props.params.postId && `${this.state.baseUrl}${this.props.params.postId}/${this.props.params.postId}_m.jpeg`}
                       getResult={this.handleThumbCreated}
                     />
                   </div>
                 </div>
                 <div>
                   <label htmlFor="">Recommend </label>
-                  <img src={this.state.post.recommendSrc ? this.state.post.recommendSrc : this.props.params.postId && `${this.state.baseUrl}${this.props.params.postId}/${this.props.params.postId}_r.jpeg`} alt="" />
+                  <img src={this.props.params.postId && `${this.state.baseUrl}${this.props.params.postId}/${this.props.params.postId}_r.jpeg`} alt="" />
                   <button onClick={this.turnOnRecommendCropper}>Crop image to recommend</button>
                   <div style={{ display: this.state.cropperRecommendTurnedOn ? 'block' : 'none' }}>
                     <ImageCropper
@@ -443,7 +451,7 @@ class PostDetail extends Component {
                       wrapperHeight={157}
                       resultWidth={300}
                       resultHeight={157}
-                      inputSrc={this.state.post.mediaSrc ? this.state.post.mediaSrc : this.props.params.postId && `${this.state.baseUrl}${this.props.params.postId}/${this.props.params.postId}_m.jpeg`}
+                      inputSrc={this.props.params.postId && `${this.state.baseUrl}${this.props.params.postId}/${this.props.params.postId}_m.jpeg`}
                       getResult={this.handleRecommendCreated}
                     />
                   </div>

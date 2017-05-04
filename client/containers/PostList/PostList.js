@@ -19,8 +19,8 @@ class PostList extends Component {
       posts: [],
       paging: 10,
     };
-    // this.baseUrl = window.location.hostname === 'localhost' ? 'http://localhost:4000/posts_data/' : 'http://tuoihoctro.co/posts_data/';
-    this.baseUrl = 'http://tuoihoctro.co/posts_data/';
+    this.baseUrl = window.location.hostname === 'localhost' ? 'http://localhost:4000/posts_data/' : 'http://tuoihoctro.co/posts_data/';
+    // this.baseUrl = 'http://tuoihoctro.co/posts_data/';
     this.handleSelect = this.handleSelect.bind(this);
     this.handlePostDelete = this.handlePostDelete.bind(this);
     this.handlePagingChange = this.handlePagingChange.bind(this);
