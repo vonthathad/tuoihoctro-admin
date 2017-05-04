@@ -78,7 +78,7 @@ class PostDetail extends Component {
           ...data,
           mediaSrc: mp464 !== '' ? mp464 : data.mediaSrc,
           type: mp464 !== '' ? 1 : data.type,
-          cate: data.cate ? data.cate : 0, 
+          cate: data.cate ? data.cate : 0,
         }
       });
     }
