@@ -116,14 +116,16 @@ class PostList extends Component {
                         <video
                           loop
                           controls
+                          autoPlay
                           src={`${this.baseUrl}${post._id}/${post._id}_m.mp4`}
                           type="video/mp4"
+                          className={styles.video}
                         >
                         </video>
                         {/* <img src={`${post.mediaContent}`} alt={post.mediaContent} className={styles.images} />*/}
                       </td>
                     :
-                      <td><img src={`${this.baseUrl}${post._id}/${post._id}_m.jpeg`} alt={post.mediaContent} className={styles.images} /></td>
+                      <td><img style={{ backgroundImage: `url(${this.baseUrl}${post._id}/${post._id}_m.jpeg)` }} alt={post.mediaContent} className={`${styles.images} ${styles.media}`} /></td>
                   }
                   <td><img src={`${this.baseUrl}${post._id}/${post._id}_t.jpeg`} alt={post.thumb} className={styles.images} /></td>
                   <td><img src={`${this.baseUrl}${post._id}/${post._id}_r.jpeg`} alt={post.smallThumb} className={styles.images} /></td>

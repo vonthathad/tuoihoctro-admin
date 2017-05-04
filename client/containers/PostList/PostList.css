@@ -1,5 +1,12 @@
 .images{
     width: 300px;
+    background-size: 300px;
+}
+.media{
+    height: 300px;
+}
+.video{
+    width: 300px;
 }
 .pagination-wrapper{
     text-align: center
