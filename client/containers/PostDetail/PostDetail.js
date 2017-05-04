@@ -72,7 +72,7 @@ class PostDetail extends Component {
     }
     // console.log(data);
     if (this.props.params.postId && this.props.postDetail.post !== data) {
-      // console.log(data);
+      console.log(data.cate);
       this.setState({
         post: {
           ...data,
