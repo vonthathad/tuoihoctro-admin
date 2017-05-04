@@ -232,7 +232,7 @@ exports.create = async (req, res) => {
     if (post.thumbSrc && post.thumbSrc !== 'empty') {
       const thumb64 = post.thumbSrc.replace(/^data:image\/jpeg;base64,/, '');
       const thumbPath = `${basePath}${newId}_t.jpeg`;
-      const thumbWMPath = `${basePath}../_wm/wm_t.png`;
+      const thumbWMPath = `${basePath}../../_wm/wm_t.png`;
       const thumbResizePath = `${basePath}${newId}_tr.jpeg`;
       await writeFileFromByte64(thumbPath, thumb64);
       await addWM2Img(thumbPath, thumbWMPath);
