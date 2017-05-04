@@ -119,7 +119,7 @@ const compressJPG = (inputPath) => {
 const optiMp4 = (path) => {
   return new Promise((resolve, reject) => {
     const tempPath = `${path.split('.mp4')[0]}x.mp4`;
-    childProcess.exec(`ffmpeg -i ${path} -movflags faststart -acodec copy -vcodec copy -an -strict -2 ${tempPath} -y && mv ${tempPath} ${path} `, (err) => {
+    childProcess.exec(`ffmpeg -i ${path} -movflags faststart -acodec copy -an -vcodec  copy -strict -2 ${tempPath} -y && mv ${tempPath} ${path} `, (err) => {
       if (err) { reject({ code: 500, err }); return; }
       resolve();
     });
@@ -224,7 +224,7 @@ exports.create = async (req, res) => {
     } else {
       await resizeMp4(mediaPath);
       await addWM2Mp4(mediaPath, mediaWMPath);
-      // await optiMp4(mediaPath);
+      await optiMp4(mediaPath);
     }
     const mh = !isGif ? await getImgHeight(mediaPath) : 0;
 
