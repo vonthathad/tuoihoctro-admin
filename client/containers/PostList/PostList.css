@@ -1,6 +1,7 @@
 .images{
     width: 300px;
     background-size: 300px;
+    background-repeat: no-repeat;
 }
 .media{
     height: 300px;
