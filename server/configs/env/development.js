@@ -1,7 +1,7 @@
 const development = {
     // mongoURL: 'mongodb://admin:tht2017PCMG@23.88.239.10:61511/tuoihoctro',
-  // mongoURL: 'mongodb://dbadmin:thtdbadmin@45.76.151.211:63547/tht',
-  mongoURL: 'mongodb://localhost:27017/tht',
+  mongoURL: 'mongodb://dbadmin:thtdbadmin@45.76.151.211:63547/tht',
+  // mongoURL: 'mongodb://localhost:27017/tht',
   key: {
     privateKey: 'PRIVATEKEYGOESHERE',
     tokenExpiry: 30 * 1000 * 60, // 1 hour

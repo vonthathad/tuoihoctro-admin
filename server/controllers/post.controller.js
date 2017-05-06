@@ -4,10 +4,11 @@
 import Post from '../models/post.model';
 const npp = 6;
 import fs from 'fs-extra';
-import ffmpeg from 'fluent-ffmpeg';
 import childProcess from 'child_process';
 import _slug from 'slug';
 import crypto from 'crypto';
+import { createClient } from 'redis';
+const redis = createClient(6379, 'localhost');
 
 const storeDir = `${__dirname}/../../../tuoihoctro.co/public/posts_data/`;
 
@@ -201,6 +202,30 @@ function requestOK(res, data) {
     resolve();
   });
 }
+function redisCheckExist(key) {
+  return new Promise((resolve, reject) => {
+    redis.ttl(key, (err, value) => {
+      if (err) { reject({ code: 500, err }); return; }
+      resolve(value);
+    });
+  });
+}
+function redisUpdate(key, value) {
+  return new Promise((resolve, reject) => {
+    redis.set(key, value, (err) => {
+      if (err) { reject({ code: 500, err }); return; }
+      resolve();
+    });
+  });
+}
+function redisDelete(key) {
+  return new Promise((resolve, reject) => {
+    redis.del(key, (err) => {
+      if (err) { reject({ code: 500, err }); return; }
+      resolve();
+    });
+  });
+}
 exports.create = async (req, res) => {
   const post = req.body;
   // const baseUrl = 'http://localhost:4000/';
@@ -255,7 +280,7 @@ exports.create = async (req, res) => {
       await compressJPG(recommendPath);
       await compressJPG(recommendResizePath);
     }
-    const slug = `${_slug(post.title)}-${crypto.randomBytes(6).toString('hex')}`;
+    const slug = `${_slug(post.title)}-${crypto.randomBytes(6).toString('hex')}`.toLowerCase();
     const data = { slug, th, mh, title: post.title, cate: post.cate, type: post.type, _id: newId, processed: true, publish: post.publish };
     await updatePostById(data);
     await requestOK(res, data);
@@ -324,9 +349,12 @@ exports.update = async (req, res) => {
       await compressJPG(recommendResizePath);
     }
 
-    const slug = `${_slug(post.title)}-${crypto.randomBytes(6).toString('hex')}`;
+    const slug = `${_slug(post.title)}-${crypto.randomBytes(6).toString('hex')}`.toLowerCase();
     const data = { slug, th, mh, title: post.title, cate: post.cate, type: post.type, _id: currentId, processed: true, publish: post.publish };
-    await updatePostById(data);
+    const updatedPost = await updatePostById(data);
+    if (await redisCheckExist(post.slug) !== -2) {
+      await redisUpdate(post.slug, JSON.stringify(updatedPost));
+    }
     await requestOK(res, data);
   } catch (message) {
     console.log(message);
@@ -348,6 +376,7 @@ exports.remove = async (req, res) => {
   const basePath = `${storeDir}${post._id}/`;
   await removeF(basePath);
   await removePost(post);
+  await redisDelete(post.slug);
   await requestOK(res, post);
   // } else {
   //   res.status(403).send('File is not processed');
