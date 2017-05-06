@@ -15,6 +15,12 @@ const PostSchema = new Schema({
     // required: 'Cấn tiêu đề',
     maxlength: 100,
   },
+  slug: {
+    type: String,
+    trim: true,
+    // required: 'Cấn tiêu đề',
+    maxlength: 200,
+  },
   mh: {
     type: Number,
     default: 0,

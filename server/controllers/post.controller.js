@@ -6,6 +6,8 @@ const npp = 6;
 import fs from 'fs-extra';
 import ffmpeg from 'fluent-ffmpeg';
 import childProcess from 'child_process';
+import _slug from 'slug';
+import crypto from 'crypto';
 
 const storeDir = `${__dirname}/../../../tuoihoctro.co/public/posts_data/`;
 
@@ -152,7 +154,7 @@ const resizeMp4 = (path) => {
 };
 const addWM2Img = (path, WMPath) => {
   return new Promise((resolve, reject) => {
-    childProcess.exec(`composite -gravity south ${WMPath} ${path} ${path}`, (err, stdout) => {
+    childProcess.exec(`composite -dissolve 80% -gravity south ${WMPath} ${path} ${path}`, (err, stdout) => {
       if (err) { reject({ code: 500, err }); return; }
       resolve(stdout);
     });
@@ -253,8 +255,8 @@ exports.create = async (req, res) => {
       await compressJPG(recommendPath);
       await compressJPG(recommendResizePath);
     }
-
-    const data = { th, mh, title: post.title, cate: post.cate, type: post.type, _id: newId, processed: true, publish: post.publish };
+    const slug = `${_slug(post.title)}-${crypto.randomBytes(6).toString('hex')}`;
+    const data = { slug, th, mh, title: post.title, cate: post.cate, type: post.type, _id: newId, processed: true, publish: post.publish };
     await updatePostById(data);
     await requestOK(res, data);
   } catch (message) {
@@ -322,7 +324,8 @@ exports.update = async (req, res) => {
       await compressJPG(recommendResizePath);
     }
 
-    const data = { th, mh, title: post.title, cate: post.cate, type: post.type, _id: currentId, processed: true, publish: post.publish };
+    const slug = `${_slug(post.title)}-${crypto.randomBytes(6).toString('hex')}`;
+    const data = { slug, th, mh, title: post.title, cate: post.cate, type: post.type, _id: currentId, processed: true, publish: post.publish };
     await updatePostById(data);
     await requestOK(res, data);
   } catch (message) {
@@ -359,11 +362,11 @@ exports.count = async (req, res) => {
 };
 function gifToMp4(gifPath) {
   return new Promise((resolve, reject) => {
-    const command = ffmpeg(gifPath).format('mp4').on('end', (err) => {
+    const tempPath = `${gifPath.split('.gif')[0]}x.mp4`;
+    childProcess.exec(`ffmpeg -f gif -i ${gifPath}  ${tempPath} -y && mv ${tempPath} ${gifPath} `, (err) => {
       if (err) { reject({ code: 500, err }); return; }
       resolve();
     });
-    command.save(gifPath);
   });
 }
 function file2Byte64(path) {
@@ -385,7 +388,7 @@ exports.gif2mp4 = async (req, res) => {
     await gifToMp4(gifPath);
     await resizeMp4(gifPath);
     let byte64mp4 = await (file2Byte64(gifPath));
-    await removeF(gifPath);
+    // await removeF(gifPath);
     byte64mp4 = `data:video/mp4;base64,${byte64mp4}`;
     await requestOK(res, byte64mp4);
   } catch (message) {
@@ -396,6 +399,9 @@ exports.gif2mp4 = async (req, res) => {
 };
 
 exports.get = (req, res) => {
+  return res.json({ data: req.post });
+};
+exports.getBySlug = (req, res) => {
   return res.json({ data: req.post });
 };
 
@@ -431,6 +437,7 @@ exports.postByID = (req, res, next, id) => {
     });
   return null;
 };
+
 exports.follow = (req, res) => {
   let isFollowed = false;
   req.post.follows.forEach((follow) => {
