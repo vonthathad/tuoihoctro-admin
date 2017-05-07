@@ -111,9 +111,17 @@ function cloneResize15(inputPath, outputPath) {
   });
 }
 
-const compressJPG = (inputPath) => {
+// const optiJPEG = (inputPath) => {
+//   return new Promise((resolve, reject) => {
+//     childProcess.exec(`jpegoptim --strip-all --preserve --totals --max=75 -s ${inputPath} `, (err) => {
+//       if (err) { reject({ code: 500, err }); return; }
+//       resolve();
+//     });
+//   });
+// };
+const optiJPEG = (path) => {
   return new Promise((resolve, reject) => {
-    childProcess.exec(`jpegoptim --strip-all --preserve --totals --max=75 -s ${inputPath} `, (err) => {
+    childProcess.exec(`convert ${path} -sampling-factor 4:2:0 -strip -quality 75 -interlace JPEG -colorspace RGB  ${path} -y`, (err) => {
       if (err) { reject({ code: 500, err }); return; }
       resolve();
     });
@@ -246,8 +254,8 @@ exports.create = async (req, res) => {
       const mediaResizePath = `${basePath}${newId}_mr.jpeg`;
       await addWM2Img(mediaPath, mediaWMPath);
       await cloneResize15(mediaPath, mediaResizePath);
-      await compressJPG(mediaPath);
-      await compressJPG(mediaResizePath);
+      await optiJPEG(mediaPath);
+      await optiJPEG(mediaResizePath);
     } else {
       await resizeMp4(mediaPath);
       await addWM2Mp4(mediaPath, mediaWMPath);
@@ -264,8 +272,8 @@ exports.create = async (req, res) => {
       await writeFileFromByte64(thumbPath, thumb64);
       await addWM2Img(thumbPath, thumbWMPath);
       await cloneResize15(thumbPath, thumbResizePath);
-      await compressJPG(thumbPath);
-      await compressJPG(thumbResizePath);
+      await optiJPEG(thumbPath);
+      await optiJPEG(thumbResizePath);
       th = await getImgHeight(thumbPath);
     }
 
@@ -277,8 +285,8 @@ exports.create = async (req, res) => {
       await writeFileFromByte64(recommendPath, recommend64);
       // await addWM2Img(recommendPath, recommendWMPath);
       await cloneResize15(recommendPath, recommendResizePath);
-      await compressJPG(recommendPath);
-      await compressJPG(recommendResizePath);
+      await optiJPEG(recommendPath);
+      await optiJPEG(recommendResizePath);
     }
     const slug = `${_slug(post.title)}-${crypto.randomBytes(6).toString('hex')}`.toLowerCase();
     const data = { slug, th, mh, title: post.title, cate: post.cate, type: post.type, _id: newId, processed: true, publish: post.publish };
@@ -311,8 +319,8 @@ exports.update = async (req, res) => {
         const mediaResizePath = `${basePath}${currentId}_mr.jpeg`;
         await addWM2Img(mediaPath, mediaWMPath);
         await cloneResize15(mediaPath, mediaResizePath);
-        await compressJPG(mediaPath);
-        await compressJPG(mediaResizePath);
+        await optiJPEG(mediaPath);
+        await optiJPEG(mediaResizePath);
       } else {
         await resizeMp4(mediaPath);
         await addWM2Mp4(mediaPath, mediaWMPath);
@@ -331,8 +339,8 @@ exports.update = async (req, res) => {
       await writeFileFromByte64(thumbPath, thumb64);
       await addWM2Img(thumbPath, thumbWMPath);
       await cloneResize15(thumbPath, thumbResizePath);
-      await compressJPG(thumbPath);
-      await compressJPG(thumbResizePath);
+      await optiJPEG(thumbPath);
+      await optiJPEG(thumbResizePath);
       th = await getImgHeight(thumbPath);
     }
 
@@ -345,8 +353,8 @@ exports.update = async (req, res) => {
       await writeFileFromByte64(recommendPath, recommend64);
       // await addWM2Img(recommendPath, recommendWMPath);
       await cloneResize15(recommendPath, recommendResizePath);
-      await compressJPG(recommendPath);
-      await compressJPG(recommendResizePath);
+      await optiJPEG(recommendPath);
+      await optiJPEG(recommendResizePath);
     }
 
     const slug = `${_slug(post.title)}-${crypto.randomBytes(6).toString('hex')}`.toLowerCase();
