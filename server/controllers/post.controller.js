@@ -121,7 +121,7 @@ function cloneResize15(inputPath, outputPath) {
 // };
 const optiJPEG = (path) => {
   return new Promise((resolve, reject) => {
-    childProcess.exec(`convert ${path} -sampling-factor 4:2:0 -strip -quality 75 -interlace JPEG -colorspace RGB  ${path} -y`, (err) => {
+    childProcess.exec(`convert ${path} -sampling-factor 4:2:0 -strip -quality 75 -interlace JPEG -colorspace RGB  ${path}`, (err) => {
       if (err) { reject({ code: 500, err }); return; }
       resolve();
     });
