@@ -478,19 +478,19 @@ class PostDetail extends Component {
             {this.props.params.postId ?
               <div>
                 <Button bsStyle="warning" type="submit" onClick={this.handleEditButtonClick}>
-                  Edit
+                  Sửa
                 </Button>
                 <Button bsStyle="danger" type="submit" onClick={this.handleDeleteButtonClick}>
-                  Delete
+                  Xóa
                 </Button>
               </div>
               :
               <Button bsStyle="default" type="submit" onClick={this.handleCreateButtonClick}>
-                Create
+                Tạo mới
               </Button>
             }
             <Link className="btn btn-default" to="/posts">
-              Back
+              Quay lại
             </Link>
           </div>
         </form>

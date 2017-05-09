@@ -34,25 +34,10 @@ exports.listPosts = (req, res) => {
       conds.push({ publish: true });
     }
   }
-  req.query.category && conds.push({ categories: req.query.category });
-  if (req.query.recommendations && req.user._id) {
-    if (req.user.recommendations) {
-      const cateList = [];
-      req.user.recommendations.forEach((recommendation) => {
-        cateList.push({ categories: recommendation });
-      });
-      if (cateList.length) {
-        conds.push({ $or: cateList });
-      }
-    }
-  }
-  req.query.user && conds.push({ creator: parseInt(req.query.user, 10) });
-  req.query.text && conds.push({
-    $or: [
-      { title: { $regex: req.query.text, $options: 'i' } },
-      { description: { $regex: req.query.text, $options: 'i' } },
-    ],
-  });
+  req.query.cate && conds.push({ cate: parseInt(req.query.cate, 10) });
+  req.query.type && conds.push({ type: parseInt(req.query.type, 10) });
+  // req.query.user && conds.push({ creator: parseInt(req.query.user, 10) });
+  req.query.text && conds.push({ title: { $regex: req.query.text, $options: 'i' } });
   conds.push({ processed: true });
   let match = null;
   if (!conds.length) match = {};
@@ -67,7 +52,7 @@ exports.listPosts = (req, res) => {
   Post.aggregate([
     { $match: match },
     { $project: project },
-    { $sort: { created: -1 } },
+    { $sort: { created: req.query.sort ? parseInt(req.query.sort, 10) : -1 } },
     { $skip: skip },
     { $limit: paging },
   ], (err, results) => {
