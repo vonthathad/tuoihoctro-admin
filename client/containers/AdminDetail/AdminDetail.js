@@ -26,7 +26,7 @@ class AdminDetail extends Component {
         avatar: '',
         role: 0,
         created: '',
-        banned: true,
+        banned: 'true',
       },
       usernameWarning: '',
       passwordWarning: '',
@@ -66,15 +66,8 @@ class AdminDetail extends Component {
     }
     // console.log(data);
     if (this.props.params.adminId && this.props.adminDetail.admin !== data) {
-      console.log(data);
       this.setState({ admin: { ...data } });
     }
-  }
-  shouldComponentUpdate(nextProps) {
-    // if (nextProps.adminDetail.processing !== this.state.processing) {
-    //   this.setState({ processing: nextProps.adminDetail.processing });
-    // }
-    return true;
   }
   handleOptionChange(e) {
     const publish = e.target.value === 'true';
@@ -92,12 +85,16 @@ class AdminDetail extends Component {
   }
   handleEditButtonClick(e) {
     e.preventDefault();
-    this.props.editAdmin([this.props.params.adminId], this.state.admin);
+    const admin = this.state.admin;
+    admin.banned = admin.banned === 'true' || admin.banned === true;
+    this.props.editAdmin([this.props.params.adminId], admin);
     this.clickedButton = 'edit';
   }
   handleCreateButtonClick(e) {
     e.preventDefault();
-    this.props.createAdmin(this.state.admin);
+    const admin = this.state.admin;
+    admin.banned = admin.banned === 'true' || admin.banned;
+    this.props.createAdmin(admin);
     this.clickedButton = 'create';
   }
 
@@ -138,15 +135,14 @@ class AdminDetail extends Component {
     this.setState({ admin: { ...this.state.admin, role: e.target.value } });
   }
   handleBannedChange(e) {
-    e.preventDefault();
-    this.setState({ admin: { ...this.state.admin, banned: e.target.value } });
+    this.setState({ admin: { ...this.state.admin, banned: e.target.value === 'true' } });
   }
 
 
   render() {
-    console.log(this.state.admin);
     const { admin } = this.state;
     const { processing } = this.props.adminDetail;
+    console.log(admin);
     return (
       <div className={`${styles.formWrapper}`}>
         <form>
@@ -207,10 +203,11 @@ class AdminDetail extends Component {
             <FormControl componentClass="select" placeholder="select" value={this.state.admin.role} onChange={this.handleRoleChange}>
               <option value="0">Admin</option>
               <option value="1">Editor</option>
+              <option value="2">Chưa phân quyền</option>
             </FormControl>
           </FormGroup>
           <FormGroup>
-            <Radio name="radioGroup" inline checked={this.state.admin.banned === true} onChange={this.handleBannedChange} value="true">
+            <Radio name="radioGroup" inline checked={this.state.admin.banned} onChange={this.handleBannedChange} value="true">
               Banned
             </Radio>
             {' '}
@@ -222,19 +219,19 @@ class AdminDetail extends Component {
             {this.props.params.adminId ?
               <div>
                 <Button bsStyle="warning" type="submit" onClick={this.handleEditButtonClick}>
-                  Edit
+                  Sửa
                 </Button>
                 <Button bsStyle="danger" type="submit" onClick={this.handleDeleteButtonClick}>
-                  Delete
+                  Xóa
                 </Button>
               </div>
               :
               <Button bsStyle="default" type="submit" onClick={this.handleCreateButtonClick}>
-                Create
+                Tạo mới
               </Button>
             }
             <Link className="btn btn-default" to="/admins">
-              Back
+              Quay lại
             </Link>
           </div>
         </form>

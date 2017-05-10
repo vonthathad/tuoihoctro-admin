@@ -38,7 +38,8 @@ function request(options) {
       // console.log(res);
       if (res.status !== 200) {
         return res.json().then(body => {
-          throw body.error;
+          console.log(body);
+          throw body.message;
         });
       }
       return res.json();

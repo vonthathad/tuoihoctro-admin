@@ -74,8 +74,10 @@ function hashPassword(password, salt) {
     64, 'sha1').toString('base64');
 }
 function preUpdate(next) {
-  this.getUpdate().salt = new Buffer(crypto.randomBytes(16).toString('base64'), 'base64');
-  this.getUpdate().password = hashPassword(this.getUpdate().password, this.getUpdate().salt.toString());
+  if (this.getUpdate().password) {
+    this.getUpdate().salt = new Buffer(crypto.randomBytes(16).toString('base64'), 'base64');
+    this.getUpdate().password = hashPassword(this.getUpdate().password, this.getUpdate().salt.toString());
+  }
   next();
 }
 function findAdminByEmail(email, callback) {

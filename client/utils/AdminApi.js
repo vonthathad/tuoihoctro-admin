@@ -71,7 +71,7 @@ export function getAdmin(path) {
 }
 export function postAdmin(input) {
   const headers = {
-    Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InZvbnRoYXRoYWRAZ21haWwuY29tIiwiaWF0IjoxNDkzMDQyNjA4fQ.TowsT1N6KYJoswqeULcJe4SKWdoTEORKdYPNUnayzZI',
+    Authorization: `Bearer ${getToken()}`,
     'Content-Type': 'application/json',
   };
   return post({
@@ -93,7 +93,6 @@ export function putAdmin(path, input) {
   });
 }
 export function deleteAdmin(path) {
-  console.log(path);
   const headers = {
     Authorization: `Bearer ${getToken()}`,
   };

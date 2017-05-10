@@ -16,13 +16,14 @@ if (typeof require.ensure !== 'function') {
  */
 // if (process.env.NODE_ENV !== 'production') {
   // Require async routes only in development for react-hot-reloader to work.
-  require('./containers/PostList/PostList.js');
-  require('./containers/PostDetail/PostDetail.js');
-  require('./containers/AdminList/AdminList.js');
-  require('./containers/AdminDetail/AdminDetail.js');
-  require('./containers/Login/Login.js');
-  require('./containers/Register/Register.js');
-  require('./containers/Dashboard/Dashboard.js');
+require('./containers/PostList/PostList.js');
+require('./containers/PostDetail/PostDetail.js');
+require('./containers/AdminList/AdminList.js');
+require('./containers/AdminDetail/AdminDetail.js');
+require('./containers/Login/Login.js');
+require('./containers/Register/Register.js');
+require('./containers/Dashboard/Dashboard.js');
+require('./components/Error/Error.js');
 // }
 
 // react-router setup with code-splitting
@@ -97,6 +98,14 @@ export default (
       getComponent={(nextState, cb) => {
         require.ensure([], require => {
           cb(null, require('./containers/Register/Register.js').default);
+        });
+      }}
+    />
+    <Route
+      path="/error/:httpCode"
+      getComponent={(nextState, cb) => {
+        require.ensure([], require => {
+          cb(null, require('./components/Error/Error.js').default);
         });
       }}
     />

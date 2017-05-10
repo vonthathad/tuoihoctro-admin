@@ -191,7 +191,7 @@ export function loadAdmin(id) {
   return (dispatch) => {
     dispatch(load());
     return getAdmin(id)
-    .then(payload => { console.log(payload); dispatch(loadSuccess(payload)); })
+    .then(payload => { dispatch(loadSuccess(payload)); })
     .catch(error => { dispatch(loadFail(error)); });
   };
 }

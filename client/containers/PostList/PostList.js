@@ -67,8 +67,8 @@ class PostList extends Component {
     const query = {};
     if (page) query.page = page;
     if (paging) query.paging = paging;
-    if (cate && cate !== '') query.cate = cate;
-    if (type && type !== '') query.type = type;
+    if (cate && cate !== 'all') query.cate = cate;
+    if (type && type !== 'all') query.type = type;
     if (_search && _search !== '') query.text = _search;
     if (sort) query.sort = sort;
     // const query = { page, paging, cate, type, sort };
@@ -205,8 +205,8 @@ class PostList extends Component {
           <FormGroup controlId="formControlsSelect" className={styles.paging}>
             <ControlLabel>Sắp xếp</ControlLabel>
             <select placeholder="select" onChange={this.handleSortChange}>
-              <option value="1">Mới nhất</option>
-              <option value="-1">Cũ nhất</option>
+              <option value="-1">Mới nhất</option>
+              <option value="1">Cũ nhất</option>
             </select>
           </FormGroup>
           <FieldGroup

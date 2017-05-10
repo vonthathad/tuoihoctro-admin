@@ -51,7 +51,7 @@ export function getPost(path) {
 }
 export function postPost(input) {
   const headers = {
-    Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InZvbnRoYXRoYWRAZ21haWwuY29tIiwiaWF0IjoxNDkzMDQyNjA4fQ.TowsT1N6KYJoswqeULcJe4SKWdoTEORKdYPNUnayzZI',
+    Authorization: `Bearer ${getToken()}`,
     'Content-Type': 'application/json',
   };
   return post({

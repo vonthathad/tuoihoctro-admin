@@ -8,32 +8,35 @@ class SideBarMenu extends Component {
     super(props);
     this.logout = this.logout.bind(this);
     this.state = {
-      username: '',
+      username: localStorage.getItem('username'),
+      role: localStorage.getItem('role'),
     };
   }
   componentWillReceiveProps(nextProps) {
     // console.log(this.props.user);
     // console.log(nextProps.user);
-    if (nextProps.user && nextProps.user.displayName && nextProps.user !== this.props.user) {
+    if (nextProps.user && nextProps.user.username && nextProps.user !== this.props.user) {
       // alert(`${nextProps.user.displayName} login sucessfully`);
-      this.setState({ username: nextProps.user.displayName });
+      console.log(123);
+      this.setState({ username: nextProps.user.username.toString(), role: nextProps.user.role.toString() });
     }
   }
   logout() {
-    this.setState({ username: '' });
+    this.setState({ username: '', role: 2 });
     alert('Đã đăng xuất!');
     localStorage.removeItem('token');
+    localStorage.removeItem('username');
+    localStorage.removeItem('role');
+    location.reload();
   }
   render() {
     const { username } = this.state;
-    // console.log(1235);
-    // console.log(username);
     return (
       <div id="sidebar-menu" className={styles.sideBarMenuContainer}>
         <Navbar fluid className={styles.sidebar} inverse >
           <Navbar.Header>
             <Navbar.Brand>
-              <a href="/">{username !== '' ? username : 'Chưa login'}</a>
+              <a href="/">{username && username !== '' ? username : 'Chưa login'}</a>
             </Navbar.Brand>
             <Navbar.Toggle />
           </Navbar.Header>
@@ -41,7 +44,7 @@ class SideBarMenu extends Component {
           <Navbar.Collapse>
             <Navbar.Text className={styles.userMenu}>
               <Link to="/"><Navbar.Link><Glyphicon glyph="home" /></Navbar.Link></Link>
-              {username.length === 0 ?
+              {!username || username === '' ?
                 <Link to="/login"><Navbar.Link href="#"><Glyphicon glyph="log-in" /></Navbar.Link></Link>
                :
                 <Navbar.Link onClick={this.logout}><Glyphicon glyph="log-out" /></Navbar.Link>
@@ -49,12 +52,16 @@ class SideBarMenu extends Component {
               <Link to="/register"><Navbar.Link href="#"><Glyphicon glyph="registration-mark" /></Navbar.Link></Link>
             </Navbar.Text>
             <Nav>
-              <NavItem eventKey={1}><Link to="/posts">Bài đăng</Link></NavItem>
+              {(this.state.role === '0' || this.state.role === '1') &&
+                <NavItem eventKey={1}><Link to="/posts">Bài đăng</Link></NavItem>
+              }
               {/* <NavDropdown eventKey={1} title="Categories">
                 <MenuItem eventKey={1.1}> <Link to="/posts">Post Manager</Link></MenuItem>
                 <MenuItem eventKey={1.2} href="#"><Link to="/myths">Myth Manager</Link></MenuItem>
               </NavDropdown>*/}
-              <NavItem eventKey={2}><Link to="/admins">Quản trị</Link></NavItem>
+              {this.state.role === '0' &&
+                <NavItem eventKey={2}><Link to="/admins">Quản trị</Link></NavItem>
+              }
             </Nav>
           </Navbar.Collapse>
         </Navbar>

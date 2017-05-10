@@ -46,8 +46,8 @@ export function register(req, res) {
     admin.email = req.body.email;
     admin.username = req.body.username;
     admin.password = req.body.password;
-    admin.role = 1;
-    admin.banned = true;
+    admin.role = 2;
+    admin.banned = false;
     admin.provider = 'local';
     admin.avatar = '/images/avatar.png';
     admin.created = new Date();
@@ -282,7 +282,6 @@ export function get(req, res) {
 }
 
 export function update(req, res) {
-  // console.log(req.body);
   if (req.body.avatar) req.selectedAdmin.avatar = req.body.avatar;
     // if (req.body.username) dataChange.username = req.body.username;
   if (req.body.displayName) req.selectedAdmin.displayName = req.body.displayName;
@@ -317,41 +316,39 @@ export function adminByAdminname(req, res, next, id) {
 }
 
 export function requiresLogin(req, res, next) {
-  if (req.admin === 'guest' || !req.isAuthenticated()) {
+  if (req.user === 'guest' || !req.isAuthenticated()) {
     return res.status(401).send({
-      message: "Admin doesn't login",
-    });
-  } else if (req.admin === 'ban') {
-    return res.status(403).send({
-      message: 'Your account is banned',
+      message: "Haven't login",
     });
   }
   next();
   return null;
 }
-export function requiresManager(req, res, next) {
-  if (req.admin.role === 'manager' || req.admin.role === 'admin') {
+export function requiresEditor(req, res, next) {
+  if (req.user.role === 0 || req.user.role === 1) {
     next();
   } else {
     return res.status(403).send({
-      message: "You doesn't have a permission",
+      message: 'Bạn không có quyền',
     });
   }
   return null;
 }
 
 export function requiresAdmin(req, res, next) {
-  if (req.admin.role === 'admin') {
+  console.log('f' + req.user);
+  // console.log(req.selectedAdmin);
+  if (req.user.role === 0) {
     next();
   } else {
     return res.status(403).send({
-      message: "You doesn't have a permission",
+      message: 'Bạn không có quyền',
     });
   }
   return null;
 }
 export function isBanned(req, res, next) {
-  if (req.admin.banned) {
+  if (req.user.banned) {
     return res.status(403).send({
       message: 'Nick của bạn đã bị banned',
     });

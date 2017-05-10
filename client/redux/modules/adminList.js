@@ -5,6 +5,7 @@ const LOAD_FAIL = 'admins/LOAD_FAIL';
 const COUNT = 'admins/COUNT';
 const COUNT_SUCCESS = 'admins/COUNT_SUCCESS';
 const COUNT_FAIL = 'admins/COUNT_FAIL';
+const ERROR_REMOVE = 'admins/ERROR_REMOVE';
 const initialState = {
   processing: false,
   admins: [],
@@ -49,6 +50,11 @@ export default function reducer(state = initialState, action) {
         ...state,
         count: 0,
       };
+    case ERROR_REMOVE:
+      return {
+        ...state,
+        error: '',
+      };
     default:
       return state;
   }
@@ -88,13 +94,16 @@ function countFail(error) {
     error,
   };
 }
+function removeError() {
+  return {
+    type: ERROR_REMOVE,
+  };
+}
 export function loadAdmins(query) {
-  console.log(12315);
   return (dispatch) => {
     dispatch(load());
     return getAdmins(query)
     .then(payload => {
-      console.log(payload);
       dispatch(loadSuccess(payload));
     })
     .catch(error => {
@@ -113,5 +122,10 @@ export function _countAdmins() {
     .catch(error => {
       dispatch(countFail(error));
     });
+  };
+}
+export function _removeError() {
+  return (dispatch) => {
+    dispatch(removeError());
   };
 }

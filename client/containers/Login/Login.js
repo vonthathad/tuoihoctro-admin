@@ -25,9 +25,11 @@ class Login extends Component {
     this.handleLoginClicked = this.handleLoginClicked.bind(this);
   }
   componentWillReceiveProps(nextProps) {
-    if (nextProps.user && nextProps.user.displayName && nextProps.user !== this.props.user) {
-      alert(`${nextProps.user.displayName} login sucessfully`);
+    if (nextProps.user && nextProps.user.username && nextProps.user !== this.props.user) {
+      alert(`${nextProps.user.username} login sucessfully`);
       localStorage.setItem('token', nextProps.user.token);
+      localStorage.setItem('username', nextProps.user.username);
+      localStorage.setItem('role', nextProps.user.role);
       browserHistory.push('/');
     } else if (nextProps.error && nextProps.error !== this.props.error) {
       alert(nextProps.error);

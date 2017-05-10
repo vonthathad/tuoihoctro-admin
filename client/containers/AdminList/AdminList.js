@@ -8,7 +8,7 @@ import ControlLabel from 'react-bootstrap/lib/ControlLabel';
 import FormControl from 'react-bootstrap/lib/FormControl';
 
 import { Link } from 'react-router';
-import { loadAdmins, _countAdmins } from '../../redux/modules/adminList';
+import { loadAdmins, _countAdmins, _removeError } from '../../redux/modules/adminList';
 import { removeAdmin } from '../../redux/modules/adminDetail';
 import styles from './AdminList.css';
 
@@ -37,6 +37,10 @@ class AdminList extends Component {
         ...nextProps.adminList.admins,
       ],
     });
+    if (nextProps.adminList.error &&
+      nextProps.adminList.error !== this.props.adminList.error) {
+      this.props._removeError();
+    }
   }
   handlePagingChange(e) {
     e.preventDefault();
@@ -66,18 +70,17 @@ class AdminList extends Component {
   }
   render() {
     const admins = this.state.admins;
-    console.log(this.props);
     return (
       <div>
         <div>
           <Link to="/create-admin">
             <ButtonToolbar>
               <Button bsStyle="primary">
-                Add new
+                Thêm mới
               </Button>
             </ButtonToolbar>
           </Link>
-          <h2>Bài đăng</h2>
+          <h2>Quản trị</h2>
           <span>Tổng {this.props.adminList.count}</span>
           <FormGroup controlId="formControlsSelect" className={styles.paging}>
             <ControlLabel>Hiển thị</ControlLabel>
@@ -113,14 +116,14 @@ class AdminList extends Component {
                     <Link to={`/admins/${admin._id}`}>
                       <ButtonToolbar>
                         <Button bsStyle="warning">
-                          Edit
+                          Sửa
                         </Button>
                       </ButtonToolbar>
                     </Link>
                     <Link to="">
                       <ButtonToolbar>
                         <Button bsStyle="danger" onClick={(e) => this.handleAdminDelete(e, index, admin._id)}>
-                          Delete
+                          Xóa
                         </Button>
                       </ButtonToolbar>
                     </Link>
@@ -154,12 +157,14 @@ AdminList.propTypes = {
   loadAdmins: PropTypes.func,
   removeAdmin: PropTypes.func,
   _countAdmins: PropTypes.func,
+  _removeError: PropTypes.func,
 };
 function mapDispatchToProps(dispatch) {
   return {
     loadAdmins: (query) => dispatch(loadAdmins(query)),
     removeAdmin: (id) => dispatch(removeAdmin(id)),
     _countAdmins: () => dispatch(_countAdmins()),
+    _removeError: () => dispatch(_removeError()),
   };
 }
 function mapStateToProps(store) {

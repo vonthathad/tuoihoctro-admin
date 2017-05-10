@@ -8,6 +8,7 @@ const REGISTER_FAIL = 'auth/REGISTER_FAIL';
 const initialState = {
   user: {},
   error: '',
+  status: '',
 };
 
 export default function reducer(state = initialState, action) {
@@ -23,6 +24,7 @@ export default function reducer(state = initialState, action) {
         ...state,
         user: action.payload.data,
         error: '',
+        status: 'success',
       };
     case LOGIN_FAIL:
       return {
@@ -91,7 +93,7 @@ export function _login(input) {
     dispatch(login());
     return postLogin(input)
     .then(payload => {
-      console.log(payload);
+      // alert('login_success');
       dispatch(loginSuccess(payload));
     })
     .catch(err => {
@@ -105,11 +107,9 @@ export function _register(input) {
     dispatch(register());
     return postRegister(input)
     .then(payload => {
-      console.log(payload);
       dispatch(registerSuccess(payload));
     })
     .catch(err => {
-      console.log(err);
       dispatch(registerFail(err));
     });
   };
