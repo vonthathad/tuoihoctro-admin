@@ -28,6 +28,7 @@ class AdminList extends Component {
   componentDidMount() {
     const { page, paging } = this.state;
     const query = { page, paging };
+    // load danh sách admin api
     this.props.loadAdmins(query);
     this.props._countAdmins();
   }
@@ -37,6 +38,7 @@ class AdminList extends Component {
         ...nextProps.adminList.admins,
       ],
     });
+    // kiểm tra có thông báo lỗi hay không, nếu có thì in ra
     if (nextProps.adminList.error &&
       nextProps.adminList.error !== this.props.adminList.error) {
       this.props._removeError();
@@ -49,6 +51,7 @@ class AdminList extends Component {
     });
     const { page } = this.state;
     const query = { page, paging: e.target.value };
+    // kiểm tra thay đổi và load dữ liệu
     this.props.loadAdmins(query);
   }
   handleSelect(e) {
@@ -57,11 +60,13 @@ class AdminList extends Component {
     });
     const { paging } = this.state;
     const query = { page: e, paging };
+    // kiểm tra thay đổi và load dữ liệu
     this.props.loadAdmins(query);
   }
   handleAdminDelete(e, index, id) {
     e.preventDefault();
     const admins = this.state.admins;
+    // gọi xóa admin dựa trên admin id
     this.props.removeAdmin([id]);
     admins.splice(index, 1);
     this.setState({

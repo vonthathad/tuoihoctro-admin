@@ -27,9 +27,11 @@ class Login extends Component {
   componentWillReceiveProps(nextProps) {
     if (nextProps.user && nextProps.user.username && nextProps.user !== this.props.user) {
       alert(`${nextProps.user.username} login sucessfully`);
+      // set dữ liệu vào localstorage
       localStorage.setItem('token', nextProps.user.token);
       localStorage.setItem('username', nextProps.user.username);
       localStorage.setItem('role', nextProps.user.role);
+      // qua
       browserHistory.push('/');
     } else if (nextProps.error && nextProps.error !== this.props.error) {
       alert(nextProps.error);
@@ -37,6 +39,7 @@ class Login extends Component {
   }
 
   getUsernameValidationState() {
+    // kiểm tra tên
     const length = this.state.user.username.length;
     if (length > 10) return 'success';
     else if (length > 5) return 'warning';
@@ -44,6 +47,7 @@ class Login extends Component {
     return null;
   }
   getPasswordValidationState() {
+    // kiểm tra password
     const length = this.state.user.password.length;
     if (length > 10) return 'success';
     else if (length > 5) return 'warning';
@@ -51,9 +55,11 @@ class Login extends Component {
     return null;
   }
   handleLoginClicked() {
+    // gọi api login user
     this.props.login(this.state.user);
   }
   handleUsernameChange(e) {
+    // update username
     this.setState({
       user: {
         ...this.state.user,
@@ -62,6 +68,7 @@ class Login extends Component {
     });
   }
   handlePasswordChange(e) {
+    // update password
     this.setState({
       user: {
         ...this.state.user,

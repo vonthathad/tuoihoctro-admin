@@ -41,6 +41,7 @@ class ImageCropper extends Component {
     // this.overlayInnerRef.setAttribute('data-height', '100px');
     // console.log(`height: ${nextProps.resultWidth + 4}px`);
 
+    // Nạp hình
     this.origSrc.src = inputSrc;
 
     document.styleSheets[0].addRule(`.${styles['overlay-inner']}::before`, `height: ${resultHeight + 4}px`);

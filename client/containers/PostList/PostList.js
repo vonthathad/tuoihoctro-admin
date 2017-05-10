@@ -25,7 +25,9 @@ class PostList extends Component {
       searchText: '',
     };
     // this.baseUrl = window.location.hostname === 'localhost' ? 'http://localhost:4000/posts_data/' : 'http://tuoihoctro.co/posts_data/';
+    // khởi tạo url
     this.baseUrl = 'http://tuoihoctro.co/posts_data/';
+    // /khởi tạo các hàm để lắng nghe
     this.handleSelect = this.handleSelect.bind(this);
     this.handlePostDelete = this.handlePostDelete.bind(this);
     this.handlePagingChange = this.handlePagingChange.bind(this);
@@ -162,7 +164,6 @@ class PostList extends Component {
   }
   render() {
     const posts = this.state.posts;
-    // console.log(posts);
     return (
       <div>
         <div>

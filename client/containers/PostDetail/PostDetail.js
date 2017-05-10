@@ -28,6 +28,7 @@ class PostDetail extends Component {
         created: '',
         cate: 0,
       },
+      // khai báo base url
       baseUrl: window.location.hostname === 'localhost' ? 'http://localhost:4000/posts_data/' : 'http://tuoihoctro.co/posts_data/',
       // baseUrl: 'http://tuoihoctro.co/posts_data/',
       imageHeight: 0,
@@ -36,6 +37,7 @@ class PostDetail extends Component {
       cropperThumbTurnedOn: false,
       cropperRecommendTurnedOn: false,
     };
+    // lắng nghe các hành động
     this.handleTitleChange = this.handleTitleChange.bind(this);
     this.handleMediaChange = this.handleMediaChange.bind(this);
     this.handleCateChange = this.handleCateChange.bind(this);
@@ -51,16 +53,20 @@ class PostDetail extends Component {
 
     this.turnOnThumbCropper = this.turnOnThumbCropper.bind(this);
     this.turnOnRecommendCropper = this.turnOnRecommendCropper.bind(this);
-    this.props.params.postId && this.props.loadPost([this.props.params.postId]);
 
+    // gọi api để load post
+    this.props.params.postId && this.props.loadPost([this.props.params.postId]);
+    // đặt tên button là rỗng
     this.clickedButton = '';
   }
   componentWillReceiveProps(nextProps, nextState) {
     const { data, error, message, mp464 } = nextProps.postDetail;
+    // kiểm tra lỗi, nếu có lỗi thì in lỗi
     if (error !== '') {
       alert(error);
       this.props.turnOffError();
     }
+    // kiểm tha thông báo, nếu có thông báo thì in thông báo
     if (message !== '') {
       alert(message);
       this.props.turnOffMessage();
@@ -72,6 +78,7 @@ class PostDetail extends Component {
       }
     }
     // console.log(data);
+    // kiểm tra xem có load lại data của post không
     if (this.props.params.postId && this.props.postDetail.post !== data) {
       // console.log(data.cate);
       this.setState({
@@ -82,6 +89,7 @@ class PostDetail extends Component {
           cate: data.cate ? data.cate : 0,
         },
       });
+      // kiemr tra xem có load giftomp4 ở server phản hồi lại không
     } else if (mp464 !== this.state.post.mediaSrc) {
       this.setState({
         post: {
@@ -180,9 +188,11 @@ class PostDetail extends Component {
   handleMediaChange(e) {
     e.preventDefault();
     const input = e.target;
+    // kiểm tra xem có upload media lên browser chưa
     if (input.value === '') {
       // alert('Upload hình');
     } else {
+      // nếu có thì set lại toàn bộ state thành rỗng
       this.setState({
         post: {
           ...this.state.post,
@@ -190,9 +200,11 @@ class PostDetail extends Component {
           recommendSrc: 'empty',
         },
       });
+      // kiểm tra loại file đã up lên
       const extension = input.value.substring(
         input.value.lastIndexOf('.') + 1).toLowerCase();
       if (extension === 'png' || extension === 'jpg') {
+        // xử lý file photo
         if (input.files && input.files[0]) {
           if (input.files[0].size > 10000000) {
             // alert('File size quá lớn');
@@ -267,6 +279,7 @@ class PostDetail extends Component {
             reader.readAsDataURL(input.files[0]);
           }
         }
+        // xử lý mp4
       } else if (extension === 'mp4') {
         if (input.files && input.files[0]) {
           if (input.files[0].size > 10000000) {
@@ -293,6 +306,7 @@ class PostDetail extends Component {
             reader.readAsDataURL(input.files[0]);
           }
         }
+        // xử lý gif
       } else if (extension === 'gif') {
         if (input.files && input.files[0]) {
           if (input.files[0].size > 10000000) {
@@ -312,6 +326,7 @@ class PostDetail extends Component {
             reader.readAsDataURL(input.files[0]);
           }
         }
+        // xử lý upload sai định dạng
       } else {
         // alert('Upload file sai định dạng');
         this.setState({
@@ -319,7 +334,7 @@ class PostDetail extends Component {
             ...this.state.post,
             mediaSrc: '',
           },
-          mediaWarning: 'Upload file định dạng chỉ được png hoặc jpg',
+          mediaWarning: 'Upload file định dạng chỉ được png hoặc jpg hoặc gif hoặc mp4',
         });
         input.value = '';
       }
@@ -337,13 +352,9 @@ class PostDetail extends Component {
 
 
   render() {
-    // console.log(this.state.post.mediaSrc);
-    // console.log(this.state.post.media);
-    // console.log(`${this.state.baseUrl}${this.props.params.postId}/${this.props.params.postId}_m.jpeg`);
-    // console.log(this.state.post.thumbSrc);
     const { post } = this.state;
-    // console.log(post);
     const { processing } = this.props.postDetail;
+    // tuyển kiểu từ số sang chữ
     let typeName;
     switch (parseInt(post.type, 10)) {
       case 0: typeName = 'photo'; break;

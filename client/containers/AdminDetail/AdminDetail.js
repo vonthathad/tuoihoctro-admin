@@ -17,6 +17,7 @@ class AdminDetail extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      // đối tượng admin
       admin: {
         _id: '',
         username: '',
@@ -33,6 +34,7 @@ class AdminDetail extends Component {
       confirmedPasswordWarning: '',
       emailWarning: '',
     };
+    // lắng nghe thay đổi
     this.handleUsernameChange = this.handleUsernameChange.bind(this);
     this.handlePasswordChange = this.handlePasswordChange.bind(this);
     this.handleConfirmedPasswordChange = this.handleConfirmedPasswordChange.bind(this);
@@ -44,16 +46,20 @@ class AdminDetail extends Component {
     this.handleCreateButtonClick = this.handleCreateButtonClick.bind(this);
     this.handleDeleteButtonClick = this.handleDeleteButtonClick.bind(this);
 
+    // load data từ server
     this.props.params.adminId && this.props.loadAdmin([this.props.params.adminId]);
 
+    // nút đã click bằng rỗng
     this.clickedButton = '';
   }
   componentWillReceiveProps(nextProps) {
     const { data, error, message } = nextProps.adminDetail;
+    // nếu có lỗi thì thông báo lỗi
     if (error !== '') {
       alert(error);
       this.props.turnOffError();
     }
+    // nếu có thông báo thành công thì in ra thông báo thành công, sau đó chuyển route
     if (message !== '') {
       alert(message);
       this.props.turnOffMessage();
@@ -65,6 +71,7 @@ class AdminDetail extends Component {
       }
     }
     // console.log(data);
+    // kiểm tra xem dữ liệu mới của admin có hay không, nếu có sẽ update
     if (this.props.params.adminId && this.props.adminDetail.admin !== data) {
       this.setState({ admin: { ...data } });
     }
@@ -80,27 +87,36 @@ class AdminDetail extends Component {
   }
   handleDeleteButtonClick(e) {
     e.preventDefault();
+    // gọi api xóa admin
     this.props.removeAdmin([this.props.params.adminId]);
+    // đổi nút thành nút delete
     this.clickedButton = 'delete';
   }
   handleEditButtonClick(e) {
     e.preventDefault();
+    // lấy thông tin admin và đổi kiểu của trường banned
     const admin = this.state.admin;
     admin.banned = admin.banned === 'true' || admin.banned === true;
+    // gọi api cập nhật admin
     this.props.editAdmin([this.props.params.adminId], admin);
+    // đổi nút thành nút edit
     this.clickedButton = 'edit';
   }
   handleCreateButtonClick(e) {
     e.preventDefault();
+    // lấy thông tin admin và đổi kiểu của trường banned
     const admin = this.state.admin;
     admin.banned = admin.banned === 'true' || admin.banned;
+    // gọi api cập nhật admin
     this.props.createAdmin(admin);
+    // đổi nút thành nút tạo
     this.clickedButton = 'create';
   }
 
   handleUsernameChange(e) {
     e.preventDefault();
     const username = e.target.value;
+    // kiểm tra tên
     if (username.length < 5) this.setState({ usernameWarning: 'Username phải lớn hơn 5 kí tự' });
     else this.setState({ usernameWarning: '' });
     this.setState({ admin: { ...this.state.admin, username } });
@@ -108,6 +124,7 @@ class AdminDetail extends Component {
   handlePasswordChange(e) {
     e.preventDefault();
     const password = e.target.value;
+    // kiểm tra mật khẩu
     if (password.length < 5) this.setState({ passwordWarning: 'Password phải lớn hơn 5 kí tự' });
     else if (this.state.admin.confirmedPassword !== password) this.setState({ passwordWarning: 'Confirmed password khác password' });
     else this.setState({ passwordWarning: '' });
@@ -117,6 +134,7 @@ class AdminDetail extends Component {
   handleConfirmedPasswordChange(e) {
     e.preventDefault();
     const confirmedPassword = e.target.value;
+    // kiểm tra xác nhận mật khẩu
     if (confirmedPassword.length < 5) this.setState({ confirmedPasswordWarning: 'Confirmed password phải lớn hơn 5 kí tự' });
     else if (this.state.admin.password !== confirmedPassword) this.setState({ confirmedPasswordWarning: 'Confirmed password khác password' });
     else this.setState({ confirmedPasswordWarning: '' });
@@ -126,6 +144,7 @@ class AdminDetail extends Component {
   handleEmailChange(e) {
     e.preventDefault();
     const email = e.target.value;
+    // kiểm tra email
     if (!email.match(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)) this.setState({ emailWarning: 'Email không đúng định dạng' });
     else this.setState({ emailWarning: '' });
     this.setState({ admin: { ...this.state.admin, email } });
